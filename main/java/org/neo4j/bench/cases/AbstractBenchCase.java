@@ -3,6 +3,7 @@ package org.neo4j.bench.cases;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.neo4j.api.core.Transaction;
 import org.neo4j.bench.BenchCase;
 
 public abstract class AbstractBenchCase implements BenchCase
@@ -46,6 +47,31 @@ public abstract class AbstractBenchCase implements BenchCase
     public long getTime( String whichTimer )
     {
         return this.timers.get( whichTimer ).timeSpent;
+    }
+    
+    protected void beginTransaction( String whichTimer )
+    {
+        timerOn( whichTimer );
+        timerOn( whichTimer + "_before_commit" );
+    }
+    
+    protected void finishTransaction( Transaction tx, String whichTimer )
+    {
+        beforeCommit( whichTimer );
+        tx.finish();
+        afterCommit( whichTimer );
+    }
+    
+    private void beforeCommit( String whichTimer )
+    {
+        timerOff( whichTimer + "_before_commit" );
+        timerOn( whichTimer + "_commit" );
+    }
+    
+    private void afterCommit( String whichTimer )
+    {
+        timerOff( whichTimer + "_commit" );
+        timerOff( whichTimer );
     }
 
     public Iterable<String> getTimers()

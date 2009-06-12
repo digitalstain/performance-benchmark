@@ -13,19 +13,23 @@ public class CreateDeleteNodeCase extends WriteOneBigTxCase
     public static final String GET_TIMER = "get";
     public static final String DELETE_TIMER = "delete";
     
-    private final Collection<Node> nodes = new ArrayList<Node>();
+    private Collection<Node> nodes = new ArrayList<Node>();
     
     public CreateDeleteNodeCase( int numberOfIterations )
     {
         super( numberOfIterations );
     }
+    
+    @Override
+    protected String getTimerName()
+    {
+        return CREATE_TIMER;
+    }
 
     @Override
     public void run( NeoService neo )
     {
-        timerOn( CREATE_TIMER );
         super.run( neo );
-        timerOff( CREATE_TIMER );
         
         timerOn( GET_TIMER );
         Transaction tx = neo.beginTx();
@@ -43,7 +47,7 @@ public class CreateDeleteNodeCase extends WriteOneBigTxCase
         }
         timerOff( GET_TIMER );
         
-        timerOn( DELETE_TIMER );
+        beginTransaction( DELETE_TIMER );
         tx = neo.beginTx();
         try
         {
@@ -55,9 +59,9 @@ public class CreateDeleteNodeCase extends WriteOneBigTxCase
         }
         finally
         {
-            tx.finish();
+            finishTransaction( tx, DELETE_TIMER );
         }
-        timerOff( DELETE_TIMER );
+        nodes = null;
     }
 
     @Override

@@ -80,13 +80,13 @@ public class BenchCaseRunner
         return this.results;
     }
     
-    public void displayResult()
+    public void displayResult( Formatter formatter )
     {
         System.out.println( "\nResults\n----------------------------" );
         Map<String, BenchCaseResult> result = getResult();
         for ( Map.Entry<String, BenchCaseResult> entry : result.entrySet() )
         {
-            System.out.println( entry.getValue() );
+            System.out.println( entry.getValue().format( formatter ) );
         }
     }
 }

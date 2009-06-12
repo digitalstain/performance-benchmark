@@ -36,7 +36,7 @@ public class SetAndRemoveNodePropertiesCase extends AbstractPropertyBenchCase
         }
         timerOn( MAIN_TIMER );
         
-        timerOn( SET_TIMER );
+        beginTransaction( SET_TIMER );
         tx = neo.beginTx();
         try
         {
@@ -51,12 +51,11 @@ public class SetAndRemoveNodePropertiesCase extends AbstractPropertyBenchCase
         }
         finally
         {
-            tx.finish();
+            finishTransaction( tx, SET_TIMER );
         }
-        timerOff( SET_TIMER );
 
         Iterable<Integer> randomInts = generateRandomInts();
-        timerOn( REMOVE_TIMER );
+        beginTransaction( REMOVE_TIMER );
         tx = neo.beginTx();
         try
         {
@@ -71,9 +70,8 @@ public class SetAndRemoveNodePropertiesCase extends AbstractPropertyBenchCase
         }
         finally
         {
-            tx.finish();
+            finishTransaction( tx, REMOVE_TIMER );
         }
-        timerOff( REMOVE_TIMER );
     }
     
     private Iterable<Integer> generateRandomInts()

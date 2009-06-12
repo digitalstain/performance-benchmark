@@ -13,6 +13,7 @@ public abstract class WriteOneBigTxCase extends AbstractBenchCase
     public void run( NeoService neo )
     {
         int max = getNumberOfIterations();
+        beginTransaction( getTimerName() );
         Transaction tx = neo.beginTx();
         try
         {
@@ -24,8 +25,13 @@ public abstract class WriteOneBigTxCase extends AbstractBenchCase
         }
         finally
         {
-            tx.finish();
+            finishTransaction( tx, getTimerName() );
         }
+    }
+    
+    protected String getTimerName()
+    {
+        return MAIN_TIMER;
     }
 
     protected abstract void doOneWriteOperation( NeoService neo );

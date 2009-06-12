@@ -33,7 +33,7 @@ public class ManyRelationshipsCase extends AbstractBenchCase
             node2 = neo.createNode();
             timerOn( MAIN_TIMER );
             
-            timerOn( CREATE_TIMER );
+            beginTransaction( CREATE_TIMER );
             for ( int i = 0; i < max; i++ )
             {
                 node1.createRelationshipTo( node2, type );
@@ -42,9 +42,8 @@ public class ManyRelationshipsCase extends AbstractBenchCase
         }
         finally
         {
-            tx.finish();
+            finishTransaction( tx, CREATE_TIMER );
         }
-        timerOff( CREATE_TIMER );
         
         timerOn( GET_TIMER );
         tx = neo.beginTx();
@@ -65,7 +64,7 @@ public class ManyRelationshipsCase extends AbstractBenchCase
         }
         timerOff( GET_TIMER );
         
-        timerOn( DELETE_TIMER );
+        beginTransaction( DELETE_TIMER );
         tx = neo.beginTx();
         try
         {
@@ -77,8 +76,7 @@ public class ManyRelationshipsCase extends AbstractBenchCase
         }
         finally
         {
-            tx.finish();
+            finishTransaction( tx, DELETE_TIMER );
         }
-        timerOff( DELETE_TIMER );
     }
 }

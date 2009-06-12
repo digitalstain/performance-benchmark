@@ -6,7 +6,7 @@ import java.util.TreeMap;
 public class BenchCaseResult
 {
     private final String name;
-    private final Map<String, MutableLong> times =
+    private final Map<String, MutableLong> timers =
         new TreeMap<String, MutableLong>();
     
     public BenchCaseResult( String name )
@@ -21,33 +21,39 @@ public class BenchCaseResult
     
     public void add( String timer, long time )
     {
-        MutableLong value = this.times.get( timer );
+        MutableLong value = this.timers.get( timer );
         if ( value == null )
         {
             value = new MutableLong();
-            this.times.put( timer, value );
+            this.timers.put( timer, value );
         }
         value.value += time;
+    }
+    
+    public String format( Formatter formatter )
+    {
+        return formatter.format( this );
+    }
+    
+    public Iterable<String> getTimers()
+    {
+        return this.timers.keySet();
+    }
+    
+    public long getTime( String timer )
+    {
+        return this.timers.get( timer ).value;
     }
     
     @Override
     public String toString()
     {
         StringBuffer result = new StringBuffer();
-        result.append( name + ": " );
-        MutableLong mainTime = this.times.get( BenchCase.MAIN_TIMER );
-        if ( mainTime != null )
+        result.append( name + ":" );
+        for ( Map.Entry<String, MutableLong> entry : this.timers.entrySet() )
         {
-            result.append( formatTimeString( mainTime.value ) );
-        }
-        
-        for ( Map.Entry<String, MutableLong> entry : this.times.entrySet() )
-        {
-            if ( !entry.getKey().equals( BenchCase.MAIN_TIMER ) )
-            {
-                result.append( "\n\t" + entry.getKey() + ": " +
-                    formatTimeString( entry.getValue().value ) );
-            }
+            result.append( "\n\t" + entry.getKey() + ": " +
+                formatTimeString( entry.getValue().value ) );
         }
         return result.toString();
     }
@@ -56,8 +62,7 @@ public class BenchCaseResult
     {
         long asMillis = time / 1000000;
         long asSeconds = asMillis / 1000;
-        return time + "ns, " + asMillis + "ms, " +
-            asSeconds + "s";
+        return asSeconds + "s";
     }
     
     private static class MutableLong

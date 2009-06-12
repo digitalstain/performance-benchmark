@@ -32,6 +32,7 @@ public class SetNodePropertyCase extends WriteOneBigTxCase
         timerOn( MAIN_TIMER );
         
         super.run( neo );
+        container = null;
     }
     
     protected PropertyContainer createContainer( NeoService neo )
