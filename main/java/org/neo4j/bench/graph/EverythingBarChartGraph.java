@@ -7,9 +7,9 @@ public class EverythingBarChartGraph extends AbstractBarChartGraph
 {
     @Override
     protected void addValue( AbstractDataset dataset, double value,
-        String rowKey, String columnKey )
+        String rowKey, String benchCase, String subCase )
     {
         ( ( DefaultCategoryDataset ) dataset ).addValue(
-            value, rowKey, columnKey );
+            value, rowKey, benchCase + "-" + subCase );
     }
 }

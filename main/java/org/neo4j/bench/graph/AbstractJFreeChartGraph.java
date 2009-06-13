@@ -1,12 +1,9 @@
 package org.neo4j.bench.graph;
 
 import java.awt.Dimension;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -27,25 +24,22 @@ public abstract class AbstractJFreeChartGraph
 
     public void open( File file ) throws IOException
     {
-        BufferedReader reader = new BufferedReader( new FileReader( file ) );
-        String line = null;
-        AbstractDataset dataset = instantiateDataset();
-        Map<String, String> header = null;
-        while ( ( line = reader.readLine() ) != null )
+        final AbstractDataset dataset = instantiateDataset();
+        ResultParser parser = new ResultParser( new ResultHandler()
         {
-            if ( BenchCaseResult.isHeader( line ) )
+            public void newResult( Map<String, String> header )
             {
-                header = BenchCaseResult.parseHeader( line );
-                continue;
             }
 
-            String[] tokens = line.split( Pattern.quote( "\t" ) );
-            String columnKey = tokens[ 0 ] + "-" + tokens[ 1 ];
-            double value = Double.parseDouble( tokens[ 2 ] );
-            addValue( dataset, value,
-                header.get( BenchCaseResult.HEADER_KEY_NEO_VERSION ),
-                columnKey );
-        }
+            public void value( Map<String, String> header, double value,
+                String benchCase, String timerName )
+            {
+                addValue( dataset, value,
+                    header.get( BenchCaseResult.HEADER_KEY_NEO_VERSION ),
+                    benchCase, timerName );
+            }
+        } );
+        parser.parse( file );
 
         JFreeChart chart = createChart( dataset );
         ChartPanel chartPanel = new ChartPanel( chart );
@@ -62,7 +56,7 @@ public abstract class AbstractJFreeChartGraph
     }
     
     protected abstract void addValue( AbstractDataset dataset, double value,
-        String rowKey, String columnKey );
+        String rowKey, String benchCase, String subCase );
     
     public void close()
     {
