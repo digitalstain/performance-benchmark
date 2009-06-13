@@ -89,7 +89,7 @@ public abstract class AbstractBenchCase implements BenchCase
     @Override
     public String toString()
     {
-        return getName();
+        return getName() + "(" + getNumberOfIterations() + ")";
     }
     
     private static class Timer

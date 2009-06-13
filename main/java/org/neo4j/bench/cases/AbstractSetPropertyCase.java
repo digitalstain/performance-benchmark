@@ -33,9 +33,10 @@ public abstract class AbstractSetPropertyCase extends AbstractPropertyBenchCase
         try
         {
             int max = getNumberOfIterations();
+            Object propertyValue = getPropertyValue();
             for ( int i = 0; i < max; i++ )
             {
-                container.setProperty( "my_key", getPropertyValue() );
+                container.setProperty( "my_key", propertyValue );
             }
             tx.success();
         }
