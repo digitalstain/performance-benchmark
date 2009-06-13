@@ -10,10 +10,6 @@ import org.neo4j.api.core.NeoService;
 
 public class BenchCaseRunner
 {
-    public static final String MAGIC_HEADER_START = ">>>>>";
-    public static final String MAGIC_HEADER_END = "<<<<<";
-    public static final String HEADER_KEY_NEO_VERSION = "neo-version";
-    
     private NeoService neo;
     private final Map<String, BenchCaseResult> results =
         new TreeMap<String, BenchCaseResult>();
@@ -88,25 +84,11 @@ public class BenchCaseRunner
     public void displayResult( Map<String, String> header, Formatter formatter,
         PrintStream out )
     {
-        out.println( ">>>>>" + serializeHeader( header ) + "<<<<<" );
+        out.println( BenchCaseResult.serializeHeaderString( header ) );
         Map<String, BenchCaseResult> result = getResult();
         for ( Map.Entry<String, BenchCaseResult> entry : result.entrySet() )
         {
             formatter.format( entry.getValue(), out );
         }
-    }
-
-    private String serializeHeader( Map<String, String> header )
-    {
-        StringBuffer buffer = new StringBuffer();
-        for ( Map.Entry<String, String> entry : header.entrySet() )
-        {
-            if ( buffer.length() > 0 )
-            {
-                buffer.append( ", " );
-            }
-            buffer.append( entry.getKey() + ":" + entry.getValue() );
-        }
-        return buffer.toString();
     }
 }

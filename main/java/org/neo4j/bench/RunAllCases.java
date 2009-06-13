@@ -65,7 +65,7 @@ public class RunAllCases
         PrintStream out = new PrintStream( new FileOutputStream(
             new File( "results" ), true ) );
         Map<String, String> header = new HashMap<String, String>();
-        header.put( BenchCaseRunner.HEADER_KEY_NEO_VERSION, neoVersion );
+        header.put( BenchCaseResult.HEADER_KEY_NEO_VERSION, neoVersion );
         runner.displayResult( header, new TabFormatter(), out );
     }
 }
