@@ -8,16 +8,17 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.PropertyContainer;
 import org.neo4j.api.core.Transaction;
 
-public class SetAndRemoveNodePropertiesCase extends AbstractPropertyBenchCase
+public abstract class AbstractAddRemovePropertiesCase
+    extends AbstractPropertyBenchCase
 {
     public static final String SET_TIMER = "set";
     public static final String REMOVE_TIMER = "remove";
     protected static final int PROPERTY_COUNT = 100;
     
-    public SetAndRemoveNodePropertiesCase( int numberOfIterations,
-        Object value )
+    public AbstractAddRemovePropertiesCase( String name,
+        int numberOfIterations, Object value )
     {
-        super( numberOfIterations, value );
+        super( name, numberOfIterations, value );
     }
 
     public void run( NeoService neo )
@@ -27,7 +28,7 @@ public class SetAndRemoveNodePropertiesCase extends AbstractPropertyBenchCase
         Transaction tx = neo.beginTx();
         try
         {
-            containers = createContainers( neo );
+            containers = createContainers( neo, getNumberOfContainers() );
             tx.success();
         }
         finally
@@ -74,10 +75,16 @@ public class SetAndRemoveNodePropertiesCase extends AbstractPropertyBenchCase
         }
     }
     
+    private int getNumberOfContainers()
+    {
+        return getNumberOfIterations() / PROPERTY_COUNT;
+    }
+    
     private Iterable<Integer> generateRandomInts()
     {
         List<Integer> list = new ArrayList<Integer>();
-        for ( int i = 0; i < PROPERTY_COUNT; i++ )
+        int max = getNumberOfContainers();
+        for ( int i = 0; i < max; i++ )
         {
             list.add( i );
         }
@@ -85,14 +92,6 @@ public class SetAndRemoveNodePropertiesCase extends AbstractPropertyBenchCase
         return list;
     }
 
-    protected PropertyContainer[] createContainers( NeoService neo )
-    {
-        PropertyContainer[] result =
-            new PropertyContainer[ getNumberOfIterations() ];
-        for ( int i = 0; i < result.length; i++ )
-        {
-            result[ i ] = neo.createNode();
-        }
-        return result;
-    }
+    protected abstract PropertyContainer[] createContainers(
+        NeoService neo, int count );
 }

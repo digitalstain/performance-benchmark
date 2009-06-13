@@ -7,7 +7,7 @@ public class MinWriteTxCase extends AbstractBenchCase
 {
     public MinWriteTxCase( int numberOfIterations )
     {
-        super( numberOfIterations );
+        super( "Creates many nodes in separate tx:s", numberOfIterations );
     }
 
     public void run( NeoService neo )

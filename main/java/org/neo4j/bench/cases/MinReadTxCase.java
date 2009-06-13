@@ -8,7 +8,7 @@ public class MinReadTxCase extends AbstractBenchCase
 {
     public MinReadTxCase( int numberOfIterations )
     {
-        super( numberOfIterations );
+        super( "Many getNodeById in separate tx:s", numberOfIterations );
     }
 
     private Node createANode( NeoService neo )

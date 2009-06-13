@@ -7,15 +7,16 @@ import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
 import org.neo4j.api.core.Transaction;
 
-public class ManyRelationshipsCase extends AbstractBenchCase
+public class CreateDeleteRelationshipsCase extends AbstractBenchCase
 {
     public static final String CREATE_TIMER = "create";
     public static final String GET_TIMER = "get";
     public static final String DELETE_TIMER = "delete";
     
-    public ManyRelationshipsCase( int numberOfIterations )
+    public CreateDeleteRelationshipsCase( int numberOfIterations )
     {
-        super( numberOfIterations );
+        super( "Create/delete many relationships in one tx",
+            numberOfIterations );
     }
 
     public void run( NeoService neo )

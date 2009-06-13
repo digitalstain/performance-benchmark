@@ -8,11 +8,13 @@ import org.neo4j.bench.BenchCase;
 
 public abstract class AbstractBenchCase implements BenchCase
 {
+    private final String name;
     private final int numberOfIterations;
     private Map<String, Timer> timers = new HashMap<String, Timer>();
     
-    public AbstractBenchCase( int numberOfIterations )
+    public AbstractBenchCase( String name, int numberOfIterations )
     {
+        this.name = name;
         this.numberOfIterations = numberOfIterations;
     }
     
@@ -79,10 +81,15 @@ public abstract class AbstractBenchCase implements BenchCase
         return this.timers.keySet();
     }
 
+    public String getName()
+    {
+        return this.name;
+    }
+    
     @Override
     public String toString()
     {
-        return getClass().getSimpleName();
+        return getName();
     }
     
     private static class Timer

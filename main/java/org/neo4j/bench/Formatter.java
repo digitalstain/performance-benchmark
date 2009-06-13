@@ -1,6 +1,8 @@
 package org.neo4j.bench;
 
+import java.io.PrintStream;
+
 public interface Formatter
 {
-    String format( BenchCaseResult result );
+    void format( BenchCaseResult result, PrintStream out );
 }

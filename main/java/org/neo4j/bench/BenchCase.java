@@ -17,4 +17,6 @@ public interface BenchCase
     Iterable<String> getTimers();
     
     long getTime( String whichTimer );
+    
+    String getName();
 }

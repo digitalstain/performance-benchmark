@@ -4,10 +4,10 @@ public abstract class AbstractPropertyBenchCase extends AbstractBenchCase
 {
     private final Object propertyValue;
     
-    public AbstractPropertyBenchCase( int numberOfIterations,
+    public AbstractPropertyBenchCase( String name, int numberOfIterations,
         Object propertyValue )
     {
-        super( numberOfIterations );
+        super( name, numberOfIterations );
         this.propertyValue = propertyValue;
     }
     

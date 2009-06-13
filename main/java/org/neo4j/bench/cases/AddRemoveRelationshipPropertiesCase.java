@@ -7,19 +7,20 @@ import org.neo4j.api.core.PropertyContainer;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
 
-public class SetAndRemoveRelationshipPropertiesCase extends
-    SetAndRemoveNodePropertiesCase
+public class AddRemoveRelationshipPropertiesCase extends
+    AbstractAddRemovePropertiesCase
 {
-    public SetAndRemoveRelationshipPropertiesCase( int numberOfIterations,
+    public AddRemoveRelationshipPropertiesCase( int numberOfIterations,
         Object value )
     {
-        super( numberOfIterations, value );
+        super( "Add/remove relationship properties in one tx",
+            numberOfIterations, value );
     }
 
     @Override
-    protected PropertyContainer[] createContainers( NeoService neo )
+    protected PropertyContainer[] createContainers( NeoService neo, int count )
     {
-        Relationship[] result = new Relationship[ PROPERTY_COUNT ];
+        Relationship[] result = new Relationship[ count ];
         Node startNode = neo.createNode();
         RelationshipType type = DynamicRelationshipType.withName(
             "TEST_RELATIONSHIP" );

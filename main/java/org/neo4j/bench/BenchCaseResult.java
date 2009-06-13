@@ -30,11 +30,6 @@ public class BenchCaseResult
         value.value += time;
     }
     
-    public String format( Formatter formatter )
-    {
-        return formatter.format( this );
-    }
-    
     public Iterable<String> getTimers()
     {
         return this.timers.keySet();

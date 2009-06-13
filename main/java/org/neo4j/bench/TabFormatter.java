@@ -1,20 +1,17 @@
 package org.neo4j.bench;
 
+import java.io.PrintStream;
+
 public class TabFormatter implements Formatter
 {
-    public String format( BenchCaseResult result )
+    public void format( BenchCaseResult result, PrintStream out )
     {
-        StringBuffer buffer = new StringBuffer();
-        int counter = 0;
         for ( String timer : result.getTimers() )
         {
-            if ( counter++ > 0 )
-            {
-                buffer.append( "\n" );
-            }
-            buffer.append( result.getName() + "\t" + timer + "\t" +
-                result.getTime( timer ) );
+            long nanoTime = result.getTime( timer );
+            long asMillis = nanoTime / 1000000;
+            long asSeconds = asMillis / 1000;
+            out.println( result.getName() + "\t" + timer + "\t" + asSeconds );
         }
-        return buffer.toString();
     }
 }
