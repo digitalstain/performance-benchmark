@@ -54,7 +54,7 @@ public abstract class AbstractBenchCase implements BenchCase
     protected void beginTransaction( String whichTimer )
     {
         timerOn( whichTimer );
-        timerOn( whichTimer + "_before_commit" );
+        timerOn( whichTimer + ".before_commit" );
     }
     
     protected void finishTransaction( Transaction tx, String whichTimer )
@@ -66,13 +66,13 @@ public abstract class AbstractBenchCase implements BenchCase
     
     private void beforeCommit( String whichTimer )
     {
-        timerOff( whichTimer + "_before_commit" );
-        timerOn( whichTimer + "_commit" );
+        timerOff( whichTimer + ".before_commit" );
+        timerOn( whichTimer + ".commit" );
     }
     
     private void afterCommit( String whichTimer )
     {
-        timerOff( whichTimer + "_commit" );
+        timerOff( whichTimer + ".commit" );
         timerOff( whichTimer );
     }
 

@@ -18,11 +18,21 @@ public class ResultParser
         this.handler = handler;
     }
     
-    public void parse( File file ) throws IOException
+    public void parse( File file, Map<String, String> options )
+        throws IOException
     {
         BufferedReader reader = new BufferedReader( new FileReader( file ) );
         String line = null;
         Map<String, String> header = null;
+        
+        String benchCaseFilterString = options.get( "case-filter" );
+        Pattern benchCaseFilter = benchCaseFilterString != null ?
+            Pattern.compile( benchCaseFilterString ) : null;
+            
+        String timerFilterString = options.get( "timer-filter" );
+        Pattern timerFilter = timerFilterString != null ?
+            Pattern.compile( timerFilterString ) : null;
+        
         while ( ( line = reader.readLine() ) != null )
         {
             if ( BenchCaseResult.isHeader( line ) )
@@ -33,8 +43,28 @@ public class ResultParser
             }
 
             String[] tokens = line.split( Pattern.quote( "\t" ) );
+            String benchCase = tokens[ 0 ];
+            String timer = tokens[ 1 ];
+            if ( !matches( benchCaseFilter, benchCase ) ||
+                !matches( timerFilter, timer ) )
+            {
+                continue;
+            }
+            
             double value = Double.parseDouble( tokens[ 2 ] );
-            handler.value( header, value, tokens[ 0 ], tokens[ 1 ] );
+            handler.value( header, value, benchCase, timer );
         }
+    }
+    
+    private boolean matches( Pattern patternOrNull, String toMatch )
+    {
+        if ( patternOrNull != null )
+        {
+            if ( !patternOrNull.matcher( toMatch ).find() )
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

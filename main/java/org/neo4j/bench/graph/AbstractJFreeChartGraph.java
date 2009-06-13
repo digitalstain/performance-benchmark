@@ -10,7 +10,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
-import org.neo4j.bench.BenchCaseResult;
 
 public abstract class AbstractJFreeChartGraph
     extends ApplicationFrame implements Graph
@@ -21,8 +20,9 @@ public abstract class AbstractJFreeChartGraph
     }
     
     protected abstract AbstractDataset instantiateDataset();
-
-    public void open( File file ) throws IOException
+    
+    public void open( File file, Map<String, String> options )
+        throws IOException
     {
         final AbstractDataset dataset = instantiateDataset();
         ResultParser parser = new ResultParser( new ResultHandler()
@@ -34,12 +34,10 @@ public abstract class AbstractJFreeChartGraph
             public void value( Map<String, String> header, double value,
                 String benchCase, String timerName )
             {
-                addValue( dataset, value,
-                    header.get( BenchCaseResult.HEADER_KEY_NEO_VERSION ),
-                    benchCase, timerName );
+                addValue( dataset, header, value, benchCase, timerName );
             }
         } );
-        parser.parse( file );
+        parser.parse( file, options );
 
         JFreeChart chart = createChart( dataset );
         ChartPanel chartPanel = new ChartPanel( chart );
@@ -55,8 +53,9 @@ public abstract class AbstractJFreeChartGraph
         return new Dimension( 500, 270 );
     }
     
-    protected abstract void addValue( AbstractDataset dataset, double value,
-        String rowKey, String benchCase, String subCase );
+    protected abstract void addValue( AbstractDataset dataset,
+        Map<String, String> header, double value,
+        String benchCase, String subCase );
     
     public void close()
     {
