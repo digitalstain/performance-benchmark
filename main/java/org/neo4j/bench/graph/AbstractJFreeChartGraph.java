@@ -10,6 +10,9 @@ import java.util.Map;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.general.AbstractDataset;
 import org.neo4j.bench.BenchCase;
 
@@ -48,6 +51,14 @@ public abstract class AbstractJFreeChartGraph implements Graph
             "yyyy-MM-dd HH:mm:ss" ).format( new Date() ) + ".jpg" );
         ChartUtilities.saveChartAsJPEG( chartFile, chart,
             ( int ) dimensions.getWidth(), ( int ) dimensions.getHeight() );
+    }
+    
+    protected void rotateCategoryAxis( JFreeChart chart, double piAngle )
+    {
+        CategoryPlot plot = chart.getCategoryPlot();
+        CategoryAxis axis = plot.getDomainAxis();
+        axis.setCategoryLabelPositions(
+            CategoryLabelPositions.createUpRotationLabelPositions( piAngle ) );
     }
     
     protected Dimension getDimensions()
