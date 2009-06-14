@@ -15,18 +15,18 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.general.AbstractDataset;
 
-public abstract class AbstractJFreeChartGraph implements Graph
+public abstract class AbstractJFreeChartGraph<T> implements Graph
 {
     public AbstractJFreeChartGraph()
     {
     }
     
-    protected abstract AbstractDataset instantiateDataset();
+    protected abstract T instantiateDataset();
     
     public void open( File file, Map<String, String> options )
         throws IOException
     {
-        final AbstractDataset dataset = instantiateDataset();
+        final T dataset = instantiateDataset();
         ResultParser parser = new ResultParser( new ResultHandler()
         {
             public void newResult( Map<String, String> header )
@@ -65,7 +65,7 @@ public abstract class AbstractJFreeChartGraph implements Graph
         return new Dimension( 1024, 600 );
     }
     
-    protected abstract void addValue( AbstractDataset dataset,
+    protected abstract void addValue( T dataset,
         Map<String, String> header, double value, int numberOfIterations,
         String benchCase, String timer );
     
@@ -73,5 +73,5 @@ public abstract class AbstractJFreeChartGraph implements Graph
     {
     }
 
-    protected abstract JFreeChart createChart( AbstractDataset dataset );
+    protected abstract JFreeChart createChart( T dataset );
 }

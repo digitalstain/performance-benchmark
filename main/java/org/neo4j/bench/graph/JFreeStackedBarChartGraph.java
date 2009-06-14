@@ -3,54 +3,44 @@ package org.neo4j.bench.graph;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.GroupedStackedBarRenderer;
-import org.jfree.data.KeyToGroupMap;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.AbstractDataset;
-import org.neo4j.bench.BenchCase;
+import org.jfree.chart.renderer.AbstractRenderer;
 import org.neo4j.bench.RunUtil;
+import org.neo4j.bench.chart.ChartData;
+import org.neo4j.bench.chart.ChartDestination;
 
-public class JFreeStackedBarChartGraph extends AbstractJFreeChartGraph
+public class JFreeStackedBarChartGraph extends
+    AbstractJFreeChartGraph<ChartData> implements ChartDestination<JFreeChart>
 {
-    private KeyToGroupMap groupMap;
-    
     @Override
-    protected JFreeChart createChart( AbstractDataset dataset )
-    {
-        JFreeChart chart = ChartFactory.createStackedBarChart(
-            "Performance chart", "Bench case", "Time(s)",
-            ( DefaultCategoryDataset ) dataset, PlotOrientation.VERTICAL,
-            true, true, false );
-        
-        GroupedStackedBarRenderer renderer = new GroupedStackedBarRenderer();
-        CategoryPlot plot = ( CategoryPlot ) chart.getPlot();
-        renderer.setSeriesToGroupMap( groupMap );
-        plot.setRenderer( renderer );
-        return chart;
-    }
-
-    @Override
-    protected void addValue( AbstractDataset dataset,
-        Map<String, String> header, double value, int numberOfIterations,
-        String benchCase, String timer )
+    protected void addValue( ChartData dataset, Map<String, String> header,
+        double value, int numberOfIterations, String benchCase, String timer )
     {
         String[] subTokens = timer.split( Pattern.quote( "." ) );
-        String benchCaseWithSubCategory = benchCase + "-" + subTokens[ 0 ];
-        groupMap.mapKeyToGroup( benchCase + "-" + timer,
-            benchCaseWithSubCategory );
-        ( ( DefaultCategoryDataset ) dataset ).addValue( value,
-            benchCase + "-" + timer,
-            header.get( RunUtil.KEY_NEO_VERSION ) );
+        dataset.add( benchCase, header.get( RunUtil.KEY_NEO_VERSION ),
+            subTokens[ 0 ], value );
     }
 
     @Override
-    protected AbstractDataset instantiateDataset()
+    protected ChartData instantiateDataset()
     {
-        groupMap = new KeyToGroupMap( BenchCase.MAIN_TIMER );
-        return new DefaultCategoryDataset();
+        return new ChartData( "Performance chart", "Bench case", "Time(s)" );
+    }
+
+    @Override
+    protected JFreeChart createChart( ChartData dataset )
+    {
+        return dataset.render( this );
+    }
+
+    public JFreeChart render( String title, CategoryPlot plot,
+        AbstractRenderer renderer )
+    {
+        plot.getDomainAxis().setCategoryLabelPositions(
+            CategoryLabelPositions
+                .createUpRotationLabelPositions( Math.PI / 4.0 ) );
+        return new JFreeChart( title, plot );
     }
 }

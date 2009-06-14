@@ -19,7 +19,7 @@ import org.jfree.data.general.AbstractDataset;
 import org.jfree.ui.TextAnchor;
 import org.neo4j.bench.RunUtil;
 
-public class JFreeBarChartGraph extends AbstractJFreeChartGraph
+public class JFreeBarChartGraph extends AbstractJFreeChartGraph<AbstractDataset>
 {
     private List<Integer> numberOfIterationsList;
     
