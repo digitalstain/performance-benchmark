@@ -1,15 +1,18 @@
 package org.neo4j.bench.cases;
 
+import java.util.Properties;
+
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.PropertyContainer;
 
 public class AddRemoveNodePropertiesCase extends
     AbstractAddRemovePropertiesCase
 {
-    public AddRemoveNodePropertiesCase( int numberOfIterations, Object value )
+    public AddRemoveNodePropertiesCase( Properties iterationCountConfig,
+        Object value )
     {
-        super( "Add/remove node properties in one tx",
-            numberOfIterations, value );
+        super( "A/R_NP", iterationCountConfig, value );
+        // "Add/remove node properties in one tx"
     }
 
     @Override

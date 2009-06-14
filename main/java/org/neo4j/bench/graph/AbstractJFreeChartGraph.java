@@ -3,20 +3,20 @@ package org.neo4j.bench.graph;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.AbstractDataset;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
+import org.neo4j.bench.BenchCase;
 
-public abstract class AbstractJFreeChartGraph
-    extends ApplicationFrame implements Graph
+public abstract class AbstractJFreeChartGraph implements Graph
 {
     public AbstractJFreeChartGraph()
     {
-        super( "Neo performance graph" );
     }
     
     protected abstract AbstractDataset instantiateDataset();
@@ -32,34 +32,47 @@ public abstract class AbstractJFreeChartGraph
             }
 
             public void value( Map<String, String> header, double value,
-                String benchCase, String timerName )
+                int numberOfIterations, String benchCase, String timer )
             {
-                addValue( dataset, header, value, benchCase, timerName );
+                addValue( dataset, header, value, numberOfIterations,
+                    benchCase, timer );
             }
         } );
         parser.parse( file, options );
 
         JFreeChart chart = createChart( dataset );
         ChartPanel chartPanel = new ChartPanel( chart );
-        chartPanel.setPreferredSize( getDimensions() );
-        setContentPane( chartPanel );
-        pack();
-        RefineryUtilities.centerFrameOnScreen( this );
-        setVisible( true );
+        Dimension dimensions = getDimensions();
+        chartPanel.setPreferredSize( dimensions );
+        File chartFile = new File( "chart-" + new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss" ).format( new Date() ) + ".jpg" );
+        ChartUtilities.saveChartAsJPEG( chartFile, chart,
+            ( int ) dimensions.getWidth(), ( int ) dimensions.getHeight() );
     }
     
     protected Dimension getDimensions()
     {
-        return new Dimension( 500, 270 );
+        return new Dimension( 1024, 600 );
     }
     
     protected abstract void addValue( AbstractDataset dataset,
-        Map<String, String> header, double value,
-        String benchCase, String subCase );
+        Map<String, String> header, double value, int numberOfIterations,
+        String benchCase, String timer );
+    
+    protected String getColumnName( String benchCase, String timer )
+    {
+        if ( timer.equals( BenchCase.MAIN_TIMER ) )
+        {
+            return benchCase;
+        }
+        else
+        {
+            return benchCase + "-" + timer;
+        }
+    }
     
     public void close()
     {
-        setVisible( false );
     }
 
     protected abstract JFreeChart createChart( AbstractDataset dataset );

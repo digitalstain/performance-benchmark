@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.neo4j.bench.BenchCaseResult;
+import org.neo4j.bench.RunUtil;
 
 public class ResultParser
 {
@@ -25,10 +26,7 @@ public class ResultParser
         String line = null;
         Map<String, String> header = null;
         
-        String benchCaseFilterString = options.get( "case-filter" );
-        Pattern benchCaseFilter = benchCaseFilterString != null ?
-            Pattern.compile( benchCaseFilterString ) : null;
-            
+        String[] benchCaseFilters = RunUtil.loadBenchFilters( options );
         String timerFilterString = options.get( "timer-filter" );
         Pattern timerFilter = timerFilterString != null ?
             Pattern.compile( timerFilterString ) : null;
@@ -45,17 +43,37 @@ public class ResultParser
             String[] tokens = line.split( Pattern.quote( "\t" ) );
             String benchCase = tokens[ 0 ];
             String timer = tokens[ 1 ];
-            if ( !matches( benchCaseFilter, benchCase ) ||
+            int numberOfIterations = Integer.parseInt( tokens[ 2 ] );
+            if ( !matchesBenchFilter( benchCaseFilters, benchCase ) ||
                 !matches( timerFilter, timer ) )
             {
                 continue;
             }
             
-            double value = Double.parseDouble( tokens[ 2 ] );
-            handler.value( header, value, benchCase, timer );
+            double value = Double.parseDouble( tokens[ 3 ] );
+            handler.value( header, value, numberOfIterations,
+                benchCase, timer );
         }
     }
     
+    private boolean matchesBenchFilter( String[] benchCaseFilters,
+        String benchCase )
+    {
+        if ( benchCaseFilters == null )
+        {
+            return true;
+        }
+        
+        for ( String filter : benchCaseFilters )
+        {
+            if ( matches( Pattern.compile( filter ), benchCase ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean matches( Pattern patternOrNull, String toMatch )
     {
         if ( patternOrNull != null )

@@ -28,11 +28,11 @@ public class JFreeBarChartGraph extends AbstractJFreeChartGraph
 
     @Override
     protected void addValue( AbstractDataset dataset,
-        Map<String, String> header, double value, String benchCase,
-        String subCase )
+        Map<String, String> header, double value, int numberOfIterations,
+        String benchCase, String timer )
     {
         ( ( DefaultCategoryDataset ) dataset ).addValue(
             value, header.get( BenchCaseResult.HEADER_KEY_NEO_VERSION ),
-            benchCase + "-" + subCase );
+            getColumnName( benchCase, timer ) );
     }
 }

@@ -2,6 +2,7 @@ package org.neo4j.bench.cases;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Properties;
 
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
@@ -9,13 +10,14 @@ import org.neo4j.api.core.Transaction;
 
 public class CreateDeleteNodeCase extends AbstractBenchCase
 {
-    public static final String CREATE_TIMER = "create";
-    public static final String GET_TIMER = "get";
-    public static final String DELETE_TIMER = "delete";
+    public static final String CREATE_TIMER = "c";
+    public static final String GET_TIMER = "g";
+    public static final String DELETE_TIMER = "d";
     
-    public CreateDeleteNodeCase( int numberOfIterations )
+    public CreateDeleteNodeCase( Properties iterationCountConfig )
     {
-        super( "Create/delete many nodes in one tx", numberOfIterations );
+        super( "C/D_N", iterationCountConfig );
+        // "Create/delete many nodes in one tx"
     }
     
     public void run( NeoService neo )

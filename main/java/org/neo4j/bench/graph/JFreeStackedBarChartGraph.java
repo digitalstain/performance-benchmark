@@ -11,6 +11,7 @@ import org.jfree.chart.renderer.category.GroupedStackedBarRenderer;
 import org.jfree.data.KeyToGroupMap;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
+import org.neo4j.bench.BenchCase;
 import org.neo4j.bench.BenchCaseResult;
 
 public class JFreeStackedBarChartGraph extends AbstractJFreeChartGraph
@@ -34,22 +35,22 @@ public class JFreeStackedBarChartGraph extends AbstractJFreeChartGraph
 
     @Override
     protected void addValue( AbstractDataset dataset,
-        Map<String, String> header, double value,
-        String benchCase, String subCase )
+        Map<String, String> header, double value, int numberOfIterations,
+        String benchCase, String timer )
     {
-        String[] subTokens = subCase.split( Pattern.quote( "." ) );
+        String[] subTokens = timer.split( Pattern.quote( "." ) );
         String benchCaseWithSubCategory = benchCase + "-" + subTokens[ 0 ];
-        groupMap.mapKeyToGroup( benchCase + "-" + subCase,
+        groupMap.mapKeyToGroup( benchCase + "-" + timer,
             benchCaseWithSubCategory );
         ( ( DefaultCategoryDataset ) dataset ).addValue( value,
-            benchCase + "-" + subCase,
+            benchCase + "-" + timer,
             header.get( BenchCaseResult.HEADER_KEY_NEO_VERSION ) );
     }
 
     @Override
     protected AbstractDataset instantiateDataset()
     {
-        groupMap = new KeyToGroupMap( "whole" );
+        groupMap = new KeyToGroupMap( BenchCase.MAIN_TIMER );
         return new DefaultCategoryDataset();
     }
 }

@@ -4,7 +4,7 @@ import org.neo4j.api.core.NeoService;
 
 public interface BenchCase
 {
-    public static final String MAIN_TIMER = "whole";
+    public static final String MAIN_TIMER = "w";
     
     int getNumberOfIterations();
     

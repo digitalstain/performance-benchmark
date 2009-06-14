@@ -7,5 +7,5 @@ public interface ResultHandler
     void newResult( Map<String, String> header );
     
     void value( Map<String, String> header, double value,
-        String benchCase, String timerName );
+        int numberOfIterations, String benchCase, String timer );
 }

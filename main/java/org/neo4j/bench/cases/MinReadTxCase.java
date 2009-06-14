@@ -1,14 +1,17 @@
 package org.neo4j.bench.cases;
 
+import java.util.Properties;
+
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 
 public class MinReadTxCase extends AbstractBenchCase
 {
-    public MinReadTxCase( int numberOfIterations )
+    public MinReadTxCase( Properties iterationCountConfig )
     {
-        super( "Many getNodeById in separate tx:s", numberOfIterations );
+        super( "TX_R", iterationCountConfig );
+        // "Many getNodeById in separate tx:s"
     }
 
     private Node createANode( NeoService neo )

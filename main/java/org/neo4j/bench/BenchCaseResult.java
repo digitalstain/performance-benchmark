@@ -12,8 +12,8 @@ public class BenchCaseResult
     public static final String HEADER_KEY_NEO_VERSION = "neo-version";
     
     private final String name;
-    private final Map<String, MutableLong> timers =
-        new TreeMap<String, MutableLong>();
+    private final Map<String, ResultData> data =
+        new TreeMap<String, ResultData>();
     
     public BenchCaseResult( String name )
     {
@@ -25,46 +25,47 @@ public class BenchCaseResult
         return this.name;
     }
     
-    public void add( String timer, long time )
+    public void add( String timer, int numberOfIterations, long time )
     {
-        MutableLong value = this.timers.get( timer );
-        if ( value == null )
+        ResultData data = this.data.get( timer );
+        if ( data == null )
         {
-            value = new MutableLong();
-            this.timers.put( timer, value );
+            data = new ResultData();
+            this.data.put( timer, data );
         }
-        value.value += time;
+        data.time += time;
+        data.numberOfIterations += numberOfIterations;
     }
     
     public Iterable<String> getTimers()
     {
-        return this.timers.keySet();
+        return this.data.keySet();
     }
     
-    public long getTime( String timer )
+    public ResultData getData( String timer )
     {
-        return this.timers.get( timer ).value;
+        return this.data.get( timer );
     }
     
-    @Override
-    public String toString()
-    {
-        StringBuffer result = new StringBuffer();
-        result.append( name + ":" );
-        for ( Map.Entry<String, MutableLong> entry : this.timers.entrySet() )
-        {
-            result.append( "\n\t" + entry.getKey() + ": " +
-                formatTimeString( entry.getValue().value ) );
-        }
-        return result.toString();
-    }
-    
-    private String formatTimeString( long time )
-    {
-        long asMillis = time / 1000000;
-        long asSeconds = asMillis / 1000;
-        return asSeconds + "s";
-    }
+//    @Override
+//    public String toString()
+//    {
+//        StringBuffer result = new StringBuffer();
+//        result.append( name + ":" );
+//        for ( Map.Entry<String, ResultHolder> entry : this.timers.entrySet() )
+//        {
+//            result.append( "\n\t" + entry.getKey() + ": " +
+//                formatTimeString( entry.getValue().value ) );
+//        }
+//        return result.toString();
+//    }
+//    
+//    private String formatTimeString( long time )
+//    {
+//        long asMillis = time / 1000000;
+//        long asSeconds = asMillis / 1000;
+//        return asSeconds + "s";
+//    }
     
     public static String serializeHeaderString( Map<String, String> header )
     {
@@ -107,8 +108,19 @@ public class BenchCaseResult
         return result;
     }
     
-    private static class MutableLong
+    public static class ResultData
     {
-        private long value;
+        private long time;
+        private int numberOfIterations;
+        
+        public long getTime()
+        {
+            return this.time;
+        }
+        
+        public int getNumberOfIterations()
+        {
+            return this.numberOfIterations;
+        }
     }
 }

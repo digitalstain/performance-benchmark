@@ -1,5 +1,7 @@
 package org.neo4j.bench.cases;
 
+import java.util.Properties;
+
 import org.neo4j.api.core.DynamicRelationshipType;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
@@ -7,11 +9,11 @@ import org.neo4j.api.core.PropertyContainer;
 
 public class SetRelationshipPropertyCase extends AbstractSetPropertyCase
 {
-    public SetRelationshipPropertyCase( int numberOfIterations,
+    public SetRelationshipPropertyCase( Properties iterationCountConfig,
         Object value )
     {
-        super( "Set the same relationship property many times in one tx",
-            numberOfIterations, value );
+        super( "S_RP", iterationCountConfig, value );
+        // "Set the same relationship property many times in one tx"
     }
 
     @Override

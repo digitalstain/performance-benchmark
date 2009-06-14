@@ -1,13 +1,16 @@
 package org.neo4j.bench.cases;
 
+import java.util.Properties;
+
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Transaction;
 
 public class MinWriteTxCase extends AbstractBenchCase
 {
-    public MinWriteTxCase( int numberOfIterations )
+    public MinWriteTxCase( Properties iterationCountConfig )
     {
-        super( "Creates many nodes in separate tx:s", numberOfIterations );
+        super( "TX_W", iterationCountConfig );
+        // "Creates many nodes in separate tx:s"
     }
 
     public void run( NeoService neo )
