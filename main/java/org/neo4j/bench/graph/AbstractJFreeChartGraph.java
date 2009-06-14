@@ -14,7 +14,6 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.general.AbstractDataset;
-import org.neo4j.bench.BenchCase;
 
 public abstract class AbstractJFreeChartGraph implements Graph
 {
@@ -37,8 +36,8 @@ public abstract class AbstractJFreeChartGraph implements Graph
             public void value( Map<String, String> header, double value,
                 int numberOfIterations, String benchCase, String timer )
             {
-                addValue( dataset, header, value, numberOfIterations,
-                    benchCase, timer );
+                addValue( dataset, header, ( int ) value,
+                    numberOfIterations, benchCase, timer );
             }
         } );
         parser.parse( file, options );
@@ -69,18 +68,6 @@ public abstract class AbstractJFreeChartGraph implements Graph
     protected abstract void addValue( AbstractDataset dataset,
         Map<String, String> header, double value, int numberOfIterations,
         String benchCase, String timer );
-    
-    protected String getColumnName( String benchCase, String timer )
-    {
-        if ( timer.equals( BenchCase.MAIN_TIMER ) )
-        {
-            return benchCase;
-        }
-        else
-        {
-            return benchCase + "-" + timer;
-        }
-    }
     
     public void close()
     {

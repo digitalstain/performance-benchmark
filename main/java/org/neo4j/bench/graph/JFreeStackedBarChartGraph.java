@@ -12,7 +12,7 @@ import org.jfree.data.KeyToGroupMap;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
 import org.neo4j.bench.BenchCase;
-import org.neo4j.bench.BenchCaseResult;
+import org.neo4j.bench.RunUtil;
 
 public class JFreeStackedBarChartGraph extends AbstractJFreeChartGraph
 {
@@ -44,7 +44,7 @@ public class JFreeStackedBarChartGraph extends AbstractJFreeChartGraph
             benchCaseWithSubCategory );
         ( ( DefaultCategoryDataset ) dataset ).addValue( value,
             benchCase + "-" + timer,
-            header.get( BenchCaseResult.HEADER_KEY_NEO_VERSION ) );
+            header.get( RunUtil.KEY_NEO_VERSION ) );
     }
 
     @Override

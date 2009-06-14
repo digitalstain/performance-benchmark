@@ -21,21 +21,21 @@ import org.neo4j.bench.cases.SetNodePropertyCase;
 import org.neo4j.bench.cases.SetRelationshipPropertyCase;
 import org.neo4j.bench.cases.ValueGenerator;
 
-public class RunBench
+public class RunBench extends RunUtil
 {
     public static void main( String[] args ) throws Exception
     {
-        Map<String, String> arguments = RunUtil.parseArguments( args );
+        Map<String, String> arguments = parseArguments( args );
         BenchCaseRunner runner = new BenchCaseRunner();
         Collection<BenchCase> cases = instantiateAllCases( arguments );
         cases = filterCases( cases, arguments );
         runner.run( cases.toArray( new BenchCase[ 0 ] ) );
         
         PrintStream out = new PrintStream( new FileOutputStream(
-            RunUtil.getResultsFile( arguments ), true ) );
+            getResultsFile( arguments ), true ) );
         Map<String, String> header = new HashMap<String, String>();
-        header.put( BenchCaseResult.HEADER_KEY_NEO_VERSION,
-            arguments.get( BenchCaseResult.HEADER_KEY_NEO_VERSION ) );
+        header.put( KEY_NEO_VERSION,
+            arguments.get( KEY_NEO_VERSION ) );
         runner.displayResult( header, new TabFormatter(), out );
     }
     
@@ -43,7 +43,7 @@ public class RunBench
         Collection<BenchCase> cases, Map<String, String> arguments )
         throws IOException
     {
-        String[] filters = RunUtil.loadBenchFilters( arguments );
+        String[] filters = loadBenchFilters( arguments );
         if ( filters == null )
         {
             return cases;
@@ -52,7 +52,7 @@ public class RunBench
         Collection<BenchCase> result = new ArrayList<BenchCase>();
         for ( BenchCase benchCase : cases )
         {
-            if ( RunUtil.matchesAny( filters, benchCase.toString() ) )
+            if ( matchesAny( filters, benchCase.toString() ) )
             {
                 result.add( benchCase );
             }

@@ -9,7 +9,6 @@ public class BenchCaseResult
 {
     public static final String MAGIC_HEADER_START = ">>>>>";
     public static final String MAGIC_HEADER_END = "<<<<<";
-    public static final String HEADER_KEY_NEO_VERSION = "neo-version";
     
     private final String name;
     private final Map<String, ResultData> data =

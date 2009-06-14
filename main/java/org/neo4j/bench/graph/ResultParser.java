@@ -27,7 +27,7 @@ public class ResultParser
         Map<String, String> header = null;
         
         String[] benchCaseFilters = RunUtil.loadBenchFilters( options );
-        String timerFilterString = options.get( "timer-filter" );
+        String timerFilterString = options.get( RunUtil.KEY_TIMER_FILTER );
         Pattern timerFilter = timerFilterString != null ?
             Pattern.compile( timerFilterString ) : null;
         

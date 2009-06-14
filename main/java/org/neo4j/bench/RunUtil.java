@@ -12,6 +12,13 @@ import java.util.regex.Pattern;
 
 public class RunUtil
 {
+    public static final String KEY_NEO_VERSION = "neo-version";
+    public static final String KEY_RESULTS_FILE = "results-file";
+    public static final String KEY_ITERATIONS_FILE = "iterations-file";
+    public static final String KEY_BENCH_FILTER_FILE = "bench-filter-file";
+    public static final String KEY_TIMER_FILTER = "timer-filter";
+    public static final String KEY_LAYOUT = "layout";
+    
     public static Map<String, String> parseArguments( String[] args )
     {
         Map<String, String> result = new HashMap<String, String>();
@@ -40,7 +47,7 @@ public class RunUtil
     public static String[] loadBenchFilters( Map<String, String> arguments )
         throws IOException
     {
-        String benchFilterFile = arguments.get( "bench-filter-file" );
+        String benchFilterFile = arguments.get( KEY_BENCH_FILTER_FILE );
         if ( benchFilterFile == null )
         {
             return null;
@@ -91,8 +98,40 @@ public class RunUtil
 
     public static File getResultsFile( Map<String, String> arguments )
     {
-        String fileName = arguments.get( "results-file" );
+        String fileName = arguments.get( KEY_RESULTS_FILE );
         fileName = fileName != null ? fileName : "results";
         return new File( fileName );
+    }
+
+    public static String getNiceBenchCaseName( String benchCase, String timer,
+        Integer numberOfIterations )
+    {
+        String result = null;
+        if ( timer.equals( BenchCase.MAIN_TIMER ) )
+        {
+            result = benchCase;
+        }
+        else
+        {
+            result = benchCase + "-" + timer;
+        }
+        
+        if ( numberOfIterations != null )
+        {
+            int shortNumber = numberOfIterations;
+            String postFix = "";
+            if ( numberOfIterations >= 1000000 )
+            {
+                shortNumber /= 1000000;
+                postFix = "M";
+            }
+            else if ( numberOfIterations >= 1000 )
+            {
+                shortNumber /= 1000;
+                postFix = "k";
+            }
+            result += " (" + shortNumber + postFix + ")";
+        }
+        return result;
     }
 }

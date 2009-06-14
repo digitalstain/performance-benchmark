@@ -17,7 +17,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.ui.TextAnchor;
-import org.neo4j.bench.BenchCaseResult;
+import org.neo4j.bench.RunUtil;
 
 public class JFreeBarChartGraph extends AbstractJFreeChartGraph
 {
@@ -52,7 +52,7 @@ public class JFreeBarChartGraph extends AbstractJFreeChartGraph
             public String generateLabel( CategoryDataset dataset, int row,
                 int column )
             {
-                return "" + numberOfIterationsList.get( column );
+                return "" + dataset.getValue( row, column ).intValue();
             }
 
             public String generateRowLabel( CategoryDataset dataset, int row )
@@ -75,8 +75,9 @@ public class JFreeBarChartGraph extends AbstractJFreeChartGraph
         String benchCase, String timer )
     {
         ( ( DefaultCategoryDataset ) dataset ).addValue(
-            value, header.get( BenchCaseResult.HEADER_KEY_NEO_VERSION ),
-            getColumnName( benchCase, timer ) );
+            value, header.get( RunUtil.KEY_NEO_VERSION ),
+            RunUtil.getNiceBenchCaseName( benchCase, timer,
+                numberOfIterations ) );
         this.numberOfIterationsList.add( numberOfIterations );
     }
 }

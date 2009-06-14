@@ -13,9 +13,8 @@ public class TabFormatter implements Formatter
             ResultData data = result.getData( timer );
             long nanoTime = data.getTime();
             long asMillis = nanoTime / 1000000;
-            long asSeconds = asMillis / 1000;
             out.println( result.getName() + "\t" + timer + "\t" +
-                data.getNumberOfIterations() + "\t" + asSeconds );
+                data.getNumberOfIterations() + "\t" + asMillis );
         }
     }
 }
