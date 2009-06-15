@@ -26,7 +26,7 @@ public class JFreeStackedBarChartGraph extends
     @Override
     protected ChartData instantiateDataset()
     {
-        return new ChartData( "Performance chart", "Bench case", "Time(s)" );
+        return new ChartData( "Performance chart", "Bench case", "Time(ms)" );
     }
 
     @Override
