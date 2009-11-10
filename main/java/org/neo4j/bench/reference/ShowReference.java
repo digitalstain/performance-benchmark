@@ -2,6 +2,7 @@ package org.neo4j.bench.reference;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +17,8 @@ public class ShowReference extends RunUtil
     {
         Map<String, String> arguments = parseArguments( args );
         final List<OneResultData> dataset = new ArrayList<OneResultData>();
-        final String[] benchFilters = loadBenchFilters( arguments );
+        final Map<Boolean, Collection<String>> benchFilters =
+            loadFilters( arguments );
         final String timeFilter = arguments.get( KEY_TIMER_FILTER );
         final OneResultData[] referenceData = new OneResultData[ 1 ];
         final String[] referenceVersion = new String[ 1 ];
@@ -44,7 +46,7 @@ public class ShowReference extends RunUtil
             public void value( Map<String, String> header, double value,
                 int numberOfIterations, String benchCase, String timer )
             {
-                if ( matchesAny( benchFilters, benchCase ) &&
+                if ( matches( benchFilters, benchCase ) &&
                     matches( timeFilter, timer ) )
                 {
                     currentData.values.put(

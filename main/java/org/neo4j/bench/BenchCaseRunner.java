@@ -56,7 +56,8 @@ public class BenchCaseRunner
         {
             beforeCase( benchCase );
             System.out.println( "Running " + benchCase + " (" +
-                benchCase.getClass().getSimpleName() + ")" );
+                benchCase.getClass().getSimpleName() + ")" +
+                ", " + benchCase.getNumberOfIterations() + " times" );
             benchCase.timerOn( BenchCase.MAIN_TIMER );
             benchCase.run( this.neo );
             benchCase.timerOff( BenchCase.MAIN_TIMER );

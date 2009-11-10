@@ -44,27 +44,43 @@ public class RunUtil
         return result;
     }
     
-    public static String[] loadBenchFilters( Map<String, String> arguments )
-        throws IOException
+    public static Map<Boolean, Collection<String>> loadFilters(
+        Map<String, String> arguments ) throws IOException
     {
-        String benchFilterFile = arguments.get( KEY_BENCH_FILTER_FILE );
-        if ( benchFilterFile == null )
+        String filterFile = arguments.get( KEY_BENCH_FILTER_FILE );
+        if ( filterFile == null || !new File( filterFile ).exists() )
         {
             return null;
         }
-        return loadFilters( new File( benchFilterFile ) );
-    }
-
-    public static String[] loadFilters( File file ) throws IOException
-    {
-        BufferedReader reader = new BufferedReader( new FileReader( file ) );
+        
+        Map<Boolean, Collection<String>> result =
+            new HashMap<Boolean, Collection<String>>();
+        BufferedReader reader = new BufferedReader(
+            new FileReader( filterFile ) );
         String line = null;
-        Collection<String> lines = new ArrayList<String>();
         while ( ( line = reader.readLine() ) != null )
         {
+            if ( line.trim().length() == 0 )
+            {
+                continue;
+            }
+            
+            char firstChar = line.charAt( 0 );
+            Boolean type = firstChar != '-';
+            Collection<String> lines = result.get( type );
+            if ( lines == null )
+            {
+                lines = new ArrayList<String>();
+                result.put( type, lines );
+            }
+            if ( line.startsWith( "+" ) ||
+                line.startsWith( "-" ) )
+            {
+                line = line.substring( 1 );
+            }
             lines.add( line );
         }
-        return lines.toArray( new String[ lines.size() ] );
+        return result;
     }
 
     public static boolean matchesAny( String[] patternsOrNull, String toMatch )
@@ -94,6 +110,31 @@ public class RunUtil
             }
         }
         return true;
+    }
+    
+    public static boolean matches( Map<Boolean, Collection<String>> patterns,
+        String toMatch )
+    {
+        String[] inclusionsPatters = patterns.get( true ) != null ?
+            patterns.get( true ).toArray( new String[ 0 ] ) : null;
+        String[] exclusionPatters = patterns.get( false ) != null ?
+            patterns.get( false ).toArray( new String[ 0 ] ) : null;
+        if ( exclusionPatters != null )
+        {
+            if ( matchesAny( exclusionPatters, toMatch ) )
+            {
+                return false;
+            }
+        }
+        
+        if ( inclusionsPatters != null )
+        {
+            if ( matchesAny( inclusionsPatters, toMatch ) )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static File getResultsFile( Map<String, String> arguments )

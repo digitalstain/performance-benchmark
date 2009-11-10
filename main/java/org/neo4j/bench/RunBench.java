@@ -43,7 +43,7 @@ public class RunBench extends RunUtil
         Collection<BenchCase> cases, Map<String, String> arguments )
         throws IOException
     {
-        String[] filters = loadBenchFilters( arguments );
+        Map<Boolean, Collection<String>> filters = loadFilters( arguments );
         if ( filters == null )
         {
             return cases;
@@ -52,7 +52,7 @@ public class RunBench extends RunUtil
         Collection<BenchCase> result = new ArrayList<BenchCase>();
         for ( BenchCase benchCase : cases )
         {
-            if ( matchesAny( filters, benchCase.toString() ) )
+            if ( matches( filters, benchCase.toString() ) )
             {
                 result.add( benchCase );
             }

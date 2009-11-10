@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -26,10 +27,9 @@ public class ResultParser
         String line = null;
         Map<String, String> header = null;
         
-        String[] benchCaseFilters = RunUtil.loadBenchFilters( options );
+        Map<Boolean, Collection<String>> benchCaseFilters =
+            RunUtil.loadFilters( options );
         String timerFilterString = options.get( RunUtil.KEY_TIMER_FILTER );
-        Pattern timerFilter = timerFilterString != null ?
-            Pattern.compile( timerFilterString ) : null;
         
         while ( ( line = reader.readLine() ) != null )
         {
@@ -45,7 +45,7 @@ public class ResultParser
             String timer = tokens[ 1 ];
             int numberOfIterations = Integer.parseInt( tokens[ 2 ] );
             if ( !matchesBenchFilter( benchCaseFilters, benchCase ) ||
-                !matches( timerFilter, timer ) )
+                !RunUtil.matches( timerFilterString, timer ) )
             {
                 continue;
             }
@@ -56,33 +56,13 @@ public class ResultParser
         }
     }
     
-    private boolean matchesBenchFilter( String[] benchCaseFilters,
-        String benchCase )
+    private boolean matchesBenchFilter(
+        Map<Boolean, Collection<String>> benchCaseFilters, String benchCase )
     {
         if ( benchCaseFilters == null )
         {
             return true;
         }
-        
-        for ( String filter : benchCaseFilters )
-        {
-            if ( matches( Pattern.compile( filter ), benchCase ) )
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean matches( Pattern patternOrNull, String toMatch )
-    {
-        if ( patternOrNull != null )
-        {
-            if ( !patternOrNull.matcher( toMatch ).find() )
-            {
-                return false;
-            }
-        }
-        return true;
+        return RunUtil.matches( benchCaseFilters, benchCase );
     }
 }

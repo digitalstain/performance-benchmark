@@ -1,5 +1,8 @@
 package org.neo4j.bench.cases;
 
+/**
+ * Arrays are size of 5
+ */
 public abstract class ValueGenerator
 {
     public static final Boolean BOOLEAN = true;

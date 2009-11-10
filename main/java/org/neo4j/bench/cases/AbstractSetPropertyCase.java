@@ -25,7 +25,7 @@ public abstract class AbstractSetPropertyCase extends AbstractPropertyBenchCase
             if ( getPropertyValue().getClass().isArray() )
             {
                 String division = iterationCountConfig.getProperty(
-                    "setArrayPropertyDivision", null );
+                    "setArrayPropertyDivision", "1" );
                 result /= Integer.parseInt( division );
             }
         }
