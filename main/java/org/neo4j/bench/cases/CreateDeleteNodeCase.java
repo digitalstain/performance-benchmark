@@ -8,6 +8,14 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 
+/**
+ * Create/delete many nodes in one tx.
+ * 
+ * Three timers
+ * o Creates many in a tx
+ * o getNodeById in another tx
+ * o Deletes them in another tx
+ */
 public class CreateDeleteNodeCase extends AbstractBenchCase
 {
     public static final String CREATE_TIMER = "c";
@@ -17,7 +25,6 @@ public class CreateDeleteNodeCase extends AbstractBenchCase
     public CreateDeleteNodeCase( Properties iterationCountConfig )
     {
         super( iterationCountConfig );
-        // "Create/delete many nodes in one tx"
     }
     
     public void run( NeoService neo )

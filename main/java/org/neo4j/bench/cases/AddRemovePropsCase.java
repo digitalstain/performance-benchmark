@@ -9,6 +9,10 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.PropertyContainer;
 import org.neo4j.api.core.Transaction;
 
+/**
+ * o Add many new properties (on many different containers) in one tx
+ * o Remove those properties in another tx
+ */
 public abstract class AddRemovePropsCase
     extends PropertyBenchCase
 {

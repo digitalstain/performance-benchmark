@@ -4,8 +4,7 @@ import java.util.Properties;
 
 /**
  * Cases which deals with a certain property type throughout the test can
- * inherit from this class. It alters {@link #toString()} and
- * {@link #calculateIterationCount(Properties)}.
+ * inherit from this class. It alters {@link #toString()} as well.
  */
 public abstract class PropertyBenchCase extends AbstractBenchCase
 {

@@ -110,14 +110,14 @@ public abstract class AbstractBenchCase implements BenchCase
 
     public void timerOff( String whichTimer )
     {
-        long time = System.nanoTime();
+        long time = System.currentTimeMillis();
         Timer timer = getTimer( whichTimer );
         timer.timeSpent += ( time - timer.timeMarker );
     }
 
     public void timerOn( String whichTimer )
     {
-        getTimer( whichTimer ).timeMarker = System.nanoTime();
+        getTimer( whichTimer ).timeMarker = System.currentTimeMillis();
     }
 
     public long getTime( String whichTimer )

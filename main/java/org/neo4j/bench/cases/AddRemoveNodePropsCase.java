@@ -5,14 +5,12 @@ import java.util.Properties;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.PropertyContainer;
 
-public class AddRemoveNodePropsCase extends
-    AddRemovePropsCase
+public class AddRemoveNodePropsCase extends AddRemovePropsCase
 {
     public AddRemoveNodePropsCase( Properties iterationCountConfig,
         Object value )
     {
         super( iterationCountConfig, value );
-        // "Add/remove node properties in one tx"
     }
 
     @Override

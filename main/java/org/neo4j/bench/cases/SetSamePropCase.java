@@ -7,7 +7,8 @@ import org.neo4j.api.core.PropertyContainer;
 import org.neo4j.api.core.Transaction;
 
 /**
- * A super class for setting the same key many times in the same tx.
+ * A super class for setting a property on the same container with the same key
+ * many times in the same tx.
  */
 public abstract class SetSamePropCase extends PropertyBenchCase
 {

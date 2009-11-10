@@ -5,12 +5,15 @@ import java.util.Properties;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Transaction;
 
+/**
+ * Creates many nodes in separate tx:s, effectively testing the transaction
+ * log performance.
+ */
 public class MinWriteTxCase extends AbstractBenchCase
 {
     public MinWriteTxCase( Properties iterationCountConfig )
     {
         super( iterationCountConfig );
-        // "Creates many nodes in separate tx:s"
     }
 
     public void run( NeoService neo )

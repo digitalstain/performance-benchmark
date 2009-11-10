@@ -6,12 +6,14 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 
+/**
+ * Many getNodeById in separate tx:s
+ */
 public class MinReadTxCase extends AbstractBenchCase
 {
     public MinReadTxCase( Properties iterationCountConfig )
     {
         super( iterationCountConfig );
-        // "Many getNodeById in separate tx:s"
     }
 
     private Node createANode( NeoService neo )

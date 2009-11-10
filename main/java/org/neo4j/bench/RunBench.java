@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.neo4j.bench.cases.AddRemoveNodePropsCase;
 import org.neo4j.bench.cases.AddRemoveRelPropsCase;
+import org.neo4j.bench.cases.ComplexStructureCase;
 import org.neo4j.bench.cases.CreateDeleteNodeCase;
 import org.neo4j.bench.cases.CreateDeleteRelsCase;
 import org.neo4j.bench.cases.MinReadTxCase;
@@ -105,6 +106,7 @@ public class RunBench extends RunUtil
         cases.add( new CreateDeleteRelsCase( iterationCounts ) );
         cases.add( new MinWriteTxCase( iterationCounts ) );
         cases.add( new MinReadTxCase( iterationCounts ) );
+        cases.add( new ComplexStructureCase( iterationCounts ) );
         for ( Object propertyValue : propertyValues )
         {
             cases.add( new AddRemoveNodePropsCase( iterationCounts,

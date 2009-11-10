@@ -9,6 +9,14 @@ import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
 import org.neo4j.api.core.Transaction;
 
+/**
+ * Create/delete many relationships in one tx.
+ * 
+ * Three timers
+ * o Creates many in a tx
+ * o {@link Node#getRelationships()} in another tx
+ * o Deletes them in another tx
+ */
 public class CreateDeleteRelsCase extends AbstractBenchCase
 {
     public static final String CREATE_TIMER = "c";
@@ -18,7 +26,6 @@ public class CreateDeleteRelsCase extends AbstractBenchCase
     public CreateDeleteRelsCase( Properties iterationCountConfig )
     {
         super( iterationCountConfig );
-        // "Create/delete many relationships in one tx"
     }
 
     public void run( NeoService neo )
