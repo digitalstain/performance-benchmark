@@ -6,25 +6,28 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.PropertyContainer;
 import org.neo4j.api.core.Transaction;
 
-public abstract class AbstractSetPropertyCase extends AbstractPropertyBenchCase
+/**
+ * A super class for setting the same key many times in the same tx.
+ */
+public abstract class SetSamePropCase extends PropertyBenchCase
 {
     private PropertyContainer container;
     
-    public AbstractSetPropertyCase( String name,
-        Properties iterationCountConfig, Object value )
+    public SetSamePropCase( Properties iterationCountConfig,
+        Object value )
     {
-        super( name, iterationCountConfig, value );
+        super( iterationCountConfig, value );
     }
 
     @Override
-    protected Integer calculateIterationCount( Properties iterationCountConfig )
+    protected Integer calculateIterationCount()
     {
-        Integer result = super.calculateIterationCount( iterationCountConfig );
+        Integer result = super.calculateIterationCount();
         if ( result != null )
         {
             if ( getPropertyValue().getClass().isArray() )
             {
-                String division = iterationCountConfig.getProperty(
+                String division = getIterationCountConfig().getProperty(
                     "setArrayPropertyDivision", "1" );
                 result /= Integer.parseInt( division );
             }

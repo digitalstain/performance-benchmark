@@ -52,12 +52,15 @@ public class BenchCaseRunner
 
     public void run( BenchCase... benchCases )
     {
+        int benchCaseCounter = 1;
         for ( BenchCase benchCase : benchCases )
         {
             beforeCase( benchCase );
-            System.out.println( "Running " + benchCase + " (" +
+            System.out.println( fillWithZeros( benchCaseCounter++, 2 ) + "/" +
+                benchCases.length + " Running " + benchCase + " (" +
                 benchCase.getClass().getSimpleName() + ")" +
-                ", " + benchCase.getNumberOfIterations() + " times" );
+                ", " + RunUtil.shortenCount(
+                    benchCase.getNumberOfIterations() ) + " times" );
             benchCase.timerOn( BenchCase.MAIN_TIMER );
             benchCase.run( this.neo );
             benchCase.timerOff( BenchCase.MAIN_TIMER );
@@ -77,6 +80,16 @@ public class BenchCaseRunner
                     benchCase.getTime( timer ) );
             }
         }
+    }
+    
+    private static String fillWithZeros( int count, int length )
+    {
+        String result = String.valueOf( count );
+        while ( result.length() < length )
+        {
+            result = "0" + result;
+        }
+        return result;
     }
     
     public Map<String, BenchCaseResult> getResult()

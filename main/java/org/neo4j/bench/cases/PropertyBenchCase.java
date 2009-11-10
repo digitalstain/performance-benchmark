@@ -2,32 +2,25 @@ package org.neo4j.bench.cases;
 
 import java.util.Properties;
 
-public abstract class AbstractPropertyBenchCase extends AbstractBenchCase
+/**
+ * Cases which deals with a certain property type throughout the test can
+ * inherit from this class. It alters {@link #toString()} and
+ * {@link #calculateIterationCount(Properties)}.
+ */
+public abstract class PropertyBenchCase extends AbstractBenchCase
 {
     private final Object propertyValue;
     
-    public AbstractPropertyBenchCase( String name,
-        Properties iterationCountConfig, Object propertyValue )
+    public PropertyBenchCase( Properties iterationCountConfig,
+        Object propertyValue )
     {
-        super( name, iterationCountConfig );
+        super( iterationCountConfig );
         this.propertyValue = propertyValue;
     }
     
     protected Object getPropertyValue()
     {
         return this.propertyValue;
-    }
-    
-    @Override
-    protected Integer calculateIterationCount( Properties iterationCountConfig )
-    {
-        String directMatch =
-            iterationCountConfig.getProperty( toString(), null );
-        if ( directMatch != null )
-        {
-            return Integer.parseInt( directMatch );
-        }
-        return super.calculateIterationCount( iterationCountConfig );
     }
     
     @Override

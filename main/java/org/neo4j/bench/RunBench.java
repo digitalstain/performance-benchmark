@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.neo4j.bench.cases.AddRemoveNodePropertiesCase;
-import org.neo4j.bench.cases.AddRemoveRelationshipPropertiesCase;
+import org.neo4j.bench.cases.AddRemoveNodePropsCase;
+import org.neo4j.bench.cases.AddRemoveRelPropsCase;
 import org.neo4j.bench.cases.CreateDeleteNodeCase;
-import org.neo4j.bench.cases.CreateDeleteRelationshipsCase;
+import org.neo4j.bench.cases.CreateDeleteRelsCase;
 import org.neo4j.bench.cases.MinReadTxCase;
 import org.neo4j.bench.cases.MinWriteTxCase;
-import org.neo4j.bench.cases.SetNodePropertyCase;
-import org.neo4j.bench.cases.SetRelationshipPropertyCase;
+import org.neo4j.bench.cases.SetSameNodePropCase;
+import org.neo4j.bench.cases.SetSameRelPropCase;
 import org.neo4j.bench.cases.ValueGenerator;
 
 public class RunBench extends RunUtil
@@ -64,7 +64,7 @@ public class RunBench extends RunUtil
         Map<String, String> arguments ) throws IOException
     {
         String iterationCountsConfigFileName =
-            arguments.get( "iterations-file" );
+            arguments.get( KEY_ITERATIONS_FILE );
         iterationCountsConfigFileName = iterationCountsConfigFileName != null ?
             iterationCountsConfigFileName : "iterations.properties";
         Properties iterationCounts = null;
@@ -98,24 +98,33 @@ public class RunBench extends RunUtil
             ValueGenerator.STRING,
             ValueGenerator.STRING_ARRAY,
         };
-      
         Properties iterationCounts = loadIterationsConfig( arguments );
-        for ( Object propertyValue : propertyValues )
-        {
-            cases.add( new AddRemoveNodePropertiesCase( iterationCounts,
-                propertyValue ) );
-            cases.add( new AddRemoveRelationshipPropertiesCase( iterationCounts,
-                propertyValue ) );
-            cases.add( new SetNodePropertyCase( iterationCounts,
-                propertyValue ) );
-            cases.add( new SetRelationshipPropertyCase( iterationCounts,
-                propertyValue ) );
-        }
-  
+        
+        // Add the cases to run (filters are applied later)
         cases.add( new CreateDeleteNodeCase( iterationCounts ) );
-        cases.add( new CreateDeleteRelationshipsCase( iterationCounts ) );
+        cases.add( new CreateDeleteRelsCase( iterationCounts ) );
         cases.add( new MinWriteTxCase( iterationCounts ) );
         cases.add( new MinReadTxCase( iterationCounts ) );
+        for ( Object propertyValue : propertyValues )
+        {
+            cases.add( new AddRemoveNodePropsCase( iterationCounts,
+                propertyValue ) );
+        }
+        for ( Object propertyValue : propertyValues )
+        {
+            cases.add( new AddRemoveRelPropsCase( iterationCounts,
+                propertyValue ) );
+        }
+        for ( Object propertyValue : propertyValues )
+        {
+            cases.add( new SetSameNodePropCase( iterationCounts,
+                propertyValue ) );
+        }
+        for ( Object propertyValue : propertyValues )
+        {
+            cases.add( new SetSameRelPropCase( iterationCounts,
+                propertyValue ) );
+        }
         return cases;
     }
 }

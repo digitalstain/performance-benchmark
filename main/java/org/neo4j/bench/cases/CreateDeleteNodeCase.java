@@ -16,7 +16,7 @@ public class CreateDeleteNodeCase extends AbstractBenchCase
     
     public CreateDeleteNodeCase( Properties iterationCountConfig )
     {
-        super( "C/D_N", iterationCountConfig );
+        super( iterationCountConfig );
         // "Create/delete many nodes in one tx"
     }
     

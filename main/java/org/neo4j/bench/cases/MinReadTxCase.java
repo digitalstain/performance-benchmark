@@ -10,7 +10,7 @@ public class MinReadTxCase extends AbstractBenchCase
 {
     public MinReadTxCase( Properties iterationCountConfig )
     {
-        super( "TX_R", iterationCountConfig );
+        super( iterationCountConfig );
         // "Many getNodeById in separate tx:s"
     }
 

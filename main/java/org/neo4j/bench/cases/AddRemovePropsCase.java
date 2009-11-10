@@ -9,17 +9,16 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.PropertyContainer;
 import org.neo4j.api.core.Transaction;
 
-public abstract class AbstractAddRemovePropertiesCase
-    extends AbstractPropertyBenchCase
+public abstract class AddRemovePropsCase
+    extends PropertyBenchCase
 {
     public static final String SET_TIMER = "s";
     public static final String REMOVE_TIMER = "r";
     protected static final int PROPERTY_COUNT = 100;
     
-    public AbstractAddRemovePropertiesCase( String name,
-        Properties iterationCountConfig, Object value )
+    public AddRemovePropsCase( Properties iterationCountConfig, Object value )
     {
-        super( name, iterationCountConfig, value );
+        super( iterationCountConfig, value );
     }
 
     public void run( NeoService neo )

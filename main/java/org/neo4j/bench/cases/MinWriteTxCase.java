@@ -9,7 +9,7 @@ public class MinWriteTxCase extends AbstractBenchCase
 {
     public MinWriteTxCase( Properties iterationCountConfig )
     {
-        super( "TX_W", iterationCountConfig );
+        super( iterationCountConfig );
         // "Creates many nodes in separate tx:s"
     }
 

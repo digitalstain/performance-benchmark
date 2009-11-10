@@ -8,4 +8,6 @@ public interface ResultHandler
     
     void value( Map<String, String> header, double value,
         int numberOfIterations, String benchCase, String timer );
+    
+    void endResult();
 }

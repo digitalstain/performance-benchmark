@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.neo4j.bench.RunUtil;
+import org.neo4j.bench.graph.AggregatedResultHandler;
 import org.neo4j.bench.graph.ResultHandler;
 import org.neo4j.bench.graph.ResultParser;
 
@@ -54,7 +55,18 @@ public class ShowReference extends RunUtil
                         ( int ) value );
                 }
             }
+            
+            public void endResult()
+            {
+            }
         };
+        
+        Map<String, Collection<String>> aggregations =
+            RunUtil.loadAggregations( arguments );
+        if ( aggregations != null )
+        {
+            handler = new AggregatedResultHandler( handler, aggregations );
+        }
         
         File file = getResultsFile( arguments );
         new ResultParser( handler ).parse( file, arguments );

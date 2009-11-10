@@ -9,15 +9,15 @@ import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
 import org.neo4j.api.core.Transaction;
 
-public class CreateDeleteRelationshipsCase extends AbstractBenchCase
+public class CreateDeleteRelsCase extends AbstractBenchCase
 {
     public static final String CREATE_TIMER = "c";
     public static final String GET_TIMER = "g";
     public static final String DELETE_TIMER = "d";
     
-    public CreateDeleteRelationshipsCase( Properties iterationCountConfig )
+    public CreateDeleteRelsCase( Properties iterationCountConfig )
     {
-        super( "C/D_R", iterationCountConfig );
+        super( iterationCountConfig );
         // "Create/delete many relationships in one tx"
     }
 

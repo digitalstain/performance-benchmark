@@ -9,13 +9,13 @@ import org.neo4j.api.core.PropertyContainer;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
 
-public class AddRemoveRelationshipPropertiesCase extends
-    AbstractAddRemovePropertiesCase
+public class AddRemoveRelPropsCase extends
+    AddRemovePropsCase
 {
-    public AddRemoveRelationshipPropertiesCase( Properties iterationCountConfig,
+    public AddRemoveRelPropsCase( Properties iterationCountConfig,
         Object value )
     {
-        super( "A/R_RP", iterationCountConfig, value );
+        super( iterationCountConfig, value );
         // "Add/remove relationship properties in one tx"
     }
 

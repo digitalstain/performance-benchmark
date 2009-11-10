@@ -5,11 +5,12 @@ import java.util.Properties;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.PropertyContainer;
 
-public class SetNodePropertyCase extends AbstractSetPropertyCase
+public class SetSameNodePropCase extends SetSamePropCase
 {
-    public SetNodePropertyCase( Properties iterationCountConfig, Object value )
+    public SetSameNodePropCase( Properties iterationCountConfig,
+        Object value )
     {
-        super( "S_NP", iterationCountConfig, value );
+        super( iterationCountConfig, value );
         // "Set the same node property many times in one tx"
     }
 

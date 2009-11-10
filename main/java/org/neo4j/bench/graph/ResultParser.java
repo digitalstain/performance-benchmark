@@ -30,11 +30,17 @@ public class ResultParser
         Map<Boolean, Collection<String>> benchCaseFilters =
             RunUtil.loadFilters( options );
         String timerFilterString = options.get( RunUtil.KEY_TIMER_FILTER );
+        timerFilterString = timerFilterString != null ? timerFilterString : "w";
+        int lineCounter = 0;
         
         while ( ( line = reader.readLine() ) != null )
         {
             if ( BenchCaseResult.isHeader( line ) )
             {
+                if ( lineCounter > 0 )
+                {
+                    handler.endResult();
+                }
                 header = BenchCaseResult.parseHeader( line );
                 handler.newResult( header );
                 continue;
@@ -44,7 +50,7 @@ public class ResultParser
             String benchCase = tokens[ 0 ];
             String timer = tokens[ 1 ];
             int numberOfIterations = Integer.parseInt( tokens[ 2 ] );
-            if ( !matchesBenchFilter( benchCaseFilters, benchCase ) ||
+            if ( !RunUtil.matches( benchCaseFilters, benchCase ) ||
                 !RunUtil.matches( timerFilterString, timer ) )
             {
                 continue;
@@ -53,16 +59,12 @@ public class ResultParser
             double value = Double.parseDouble( tokens[ 3 ] );
             handler.value( header, value, numberOfIterations,
                 benchCase, timer );
+            lineCounter++;
         }
-    }
-    
-    private boolean matchesBenchFilter(
-        Map<Boolean, Collection<String>> benchCaseFilters, String benchCase )
-    {
-        if ( benchCaseFilters == null )
+        
+        if ( lineCounter > 0 )
         {
-            return true;
+            handler.endResult();
         }
-        return RunUtil.matches( benchCaseFilters, benchCase );
     }
 }

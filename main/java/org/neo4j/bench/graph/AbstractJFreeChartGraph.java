@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
+import org.neo4j.bench.RunUtil;
 
 public abstract class AbstractJFreeChartGraph<T> implements Graph
 {
@@ -26,7 +28,7 @@ public abstract class AbstractJFreeChartGraph<T> implements Graph
         throws IOException
     {
         final T dataset = instantiateDataset();
-        ResultParser parser = new ResultParser( new ResultHandler()
+        ResultHandler handler = new ResultHandler()
         {
             public void newResult( Map<String, String> header )
             {
@@ -38,7 +40,20 @@ public abstract class AbstractJFreeChartGraph<T> implements Graph
                 addValue( dataset, header, ( int ) value,
                     numberOfIterations, benchCase, timer );
             }
-        } );
+            
+            public void endResult()
+            {
+            }
+        };
+        
+        Map<String, Collection<String>> aggregations =
+            RunUtil.loadAggregations( options );
+        if ( aggregations != null )
+        {
+            handler = new AggregatedResultHandler( handler, aggregations );
+        }
+        
+        ResultParser parser = new ResultParser( handler );
         parser.parse( file, options );
 
         JFreeChart chart = createChart( dataset );

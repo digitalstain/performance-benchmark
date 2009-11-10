@@ -2,12 +2,14 @@ package org.neo4j.bench;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 public class RunUtil
@@ -17,6 +19,7 @@ public class RunUtil
     public static final String KEY_ITERATIONS_FILE = "iterations-file";
     public static final String KEY_BENCH_FILTER_FILE = "bench-filter-file";
     public static final String KEY_TIMER_FILTER = "timer-filter";
+    public static final String KEY_AGGREGATIONS_FILE = "aggregations-file";
     public static final String KEY_LAYOUT = "layout";
     
     public static Map<String, String> parseArguments( String[] args )
@@ -60,7 +63,8 @@ public class RunUtil
         String line = null;
         while ( ( line = reader.readLine() ) != null )
         {
-            if ( line.trim().length() == 0 )
+            line = line.trim();
+            if ( line.length() == 0 || line.startsWith( "#" ) )
             {
                 continue;
             }
@@ -79,6 +83,33 @@ public class RunUtil
                 line = line.substring( 1 );
             }
             lines.add( line );
+        }
+        return result;
+    }
+    
+    public static Map<String, Collection<String>> loadAggregations(
+        Map<String, String> arguments ) throws IOException
+    {
+        String file = arguments.get( KEY_AGGREGATIONS_FILE );
+        if ( file == null )
+        {
+            return null;
+        }
+        
+        Map<String, Collection<String>> result =
+            new HashMap<String, Collection<String>>();
+        Properties properties = new Properties();
+        properties.load( new FileInputStream( new File( file ) ) );
+        for ( Object pattern : properties.keySet() )
+        {
+            String name = properties.getProperty( ( String ) pattern );
+            Collection<String> patterns = result.get( name );
+            if ( patterns == null )
+            {
+                patterns = new ArrayList<String>();
+                result.put( ( String ) name, patterns );
+            }
+            patterns.add( ( String ) pattern );
         }
         return result;
     }
@@ -115,6 +146,11 @@ public class RunUtil
     public static boolean matches( Map<Boolean, Collection<String>> patterns,
         String toMatch )
     {
+        if ( patterns == null )
+        {
+            return true;
+        }
+        
         String[] inclusionsPatters = patterns.get( true ) != null ?
             patterns.get( true ).toArray( new String[ 0 ] ) : null;
         String[] exclusionPatters = patterns.get( false ) != null ?
@@ -143,6 +179,24 @@ public class RunUtil
         fileName = fileName != null ? fileName : "results";
         return new File( fileName );
     }
+    
+    public static String shortenCount( int count )
+    {
+        int shortCount = count;
+        String postFix = "";
+        if ( count >= 1000000 )
+        {
+            shortCount /= 1000000;
+            postFix = "M";
+        }
+        else if ( count >= 1000 )
+        {
+            shortCount /= 1000;
+            postFix = "k";
+        }
+        return "" + shortCount + postFix;
+        
+    }
 
     public static String getNiceBenchCaseName( String benchCase, String timer,
         Integer numberOfIterations )
@@ -159,19 +213,7 @@ public class RunUtil
         
         if ( numberOfIterations != null )
         {
-            int shortNumber = numberOfIterations;
-            String postFix = "";
-            if ( numberOfIterations >= 1000000 )
-            {
-                shortNumber /= 1000000;
-                postFix = "M";
-            }
-            else if ( numberOfIterations >= 1000 )
-            {
-                shortNumber /= 1000;
-                postFix = "k";
-            }
-            result += " (" + shortNumber + postFix + ")";
+            result += " (" + shortenCount( numberOfIterations ) + ")";
         }
         return result;
     }

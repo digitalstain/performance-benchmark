@@ -7,12 +7,12 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.PropertyContainer;
 
-public class SetRelationshipPropertyCase extends AbstractSetPropertyCase
+public class SetSameRelPropCase extends SetSamePropCase
 {
-    public SetRelationshipPropertyCase( Properties iterationCountConfig,
+    public SetSameRelPropCase( Properties iterationCountConfig,
         Object value )
     {
-        super( "S_RP", iterationCountConfig, value );
+        super( iterationCountConfig, value );
         // "Set the same relationship property many times in one tx"
     }
 

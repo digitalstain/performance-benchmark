@@ -7,46 +7,92 @@ import java.util.Properties;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.bench.BenchCase;
 
+/**
+ * The abstract super class of (probably) all the cases
+ */
 public abstract class AbstractBenchCase implements BenchCase
 {
     public static final String POSTFIX_BEFORE_COMMIT = "b";
     public static final String POSTFIX_COMMIT = "c";
     
-    private final String name;
     private final Properties iterationCountConfig;
     private Integer numberOfIterations;
     private Map<String, Timer> timers = new HashMap<String, Timer>();
     
-    public AbstractBenchCase( String name, Properties iterationCountConfig )
+    public AbstractBenchCase( Properties iterationCountConfig )
     {
-        this.name = name;
         this.iterationCountConfig = iterationCountConfig;
     }
     
-    protected Integer calculateIterationCount( Properties iterationCountConfig )
+    protected String getClassCamelCaseName()
     {
+        String className = getClass().getSimpleName();
+        StringBuilder camels = new StringBuilder();
+        for ( int i = 0; i < className.length(); i++ )
+        {
+            char ch = className.charAt( i );
+            if ( Character.isUpperCase( ch ) )
+            {
+                camels.append( ch );
+            }
+        }
+        String result = camels.toString();
+        if ( result.endsWith( "C" ) )
+        {
+            result = result.substring( 0, camels.length() - 1 );
+        }
+        return result;
+    }
+    
+    protected Properties getIterationCountConfig()
+    {
+        return this.iterationCountConfig;
+    }
+    
+    protected int getIterationBaseCount()
+    {
+        String baseCountString =
+            iterationCountConfig.getProperty( "base", "100000" );
+        return Integer.parseInt( baseCountString );
+    }
+    
+    protected Integer getDirectMatchIterationCount()
+    {
+        int baseCount = getIterationBaseCount();
         String directMatch =
+            iterationCountConfig.getProperty( toString(), null );
+        directMatch = directMatch != null ? directMatch :
             iterationCountConfig.getProperty( getName(), null );
+        Integer result = null;
         if ( directMatch != null )
         {
-            return Integer.parseInt( directMatch );
+            if ( directMatch.endsWith( "%" ) )
+            {
+                double percent = Double.parseDouble( directMatch.substring( 0,
+                    directMatch.length() - 1 ) );
+                percent /= 100d;
+                result = ( int ) ( baseCount * percent );
+            }
+            else
+            {
+                result = Integer.parseInt( directMatch );
+            }
         }
-        
-        String defaultCount = iterationCountConfig.getProperty( "default",
-            null );
-        if ( defaultCount != null )
-        {
-            return Integer.parseInt( defaultCount );
-        }
-        return null;
+        return result;
+    }
+    
+    protected Integer calculateIterationCount()
+    {
+        Integer result = getDirectMatchIterationCount();
+        result = result != null ? result : getIterationBaseCount();
+        return result;
     }
 
     public int getNumberOfIterations()
     {
         if ( this.numberOfIterations == null )
         {
-            this.numberOfIterations =
-                calculateIterationCount( iterationCountConfig );
+            this.numberOfIterations = calculateIterationCount();
         }
         return this.numberOfIterations;
     }
@@ -111,7 +157,7 @@ public abstract class AbstractBenchCase implements BenchCase
 
     public String getName()
     {
-        return this.name;
+        return getClassCamelCaseName();
     }
     
     @Override
