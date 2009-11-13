@@ -1,5 +1,7 @@
 package org.neo4j.bench;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -9,6 +11,7 @@ public class BenchCaseResult
 {
     public static final String MAGIC_HEADER_START = ">>>>>";
     public static final String MAGIC_HEADER_END = "<<<<<";
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH-mm-ss";
     
     private final String name;
     private final Map<String, ResultData> data =
@@ -68,16 +71,18 @@ public class BenchCaseResult
     
     public static String serializeHeaderString( Map<String, String> header )
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuffer data = new StringBuffer();
         for ( Map.Entry<String, String> entry : header.entrySet() )
         {
-            if ( buffer.length() > 0 )
+            if ( data.length() > 0 )
             {
-                buffer.append( ", " );
+                data.append( ", " );
             }
-            buffer.append( entry.getKey() + ":" + entry.getValue() );
+            data.append( entry.getKey() + ":" + entry.getValue() );
         }
-        return MAGIC_HEADER_START + buffer.toString() + MAGIC_HEADER_END;
+        data.append( ", date:" + new SimpleDateFormat(
+            DATE_FORMAT ).format( new Date() ) );
+        return MAGIC_HEADER_START + data.toString() + MAGIC_HEADER_END;
     }
     
     public static boolean isHeader( String line )
