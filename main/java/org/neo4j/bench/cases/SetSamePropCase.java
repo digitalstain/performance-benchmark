@@ -1,5 +1,6 @@
 package org.neo4j.bench.cases;
 
+import java.lang.reflect.Array;
 import java.util.Properties;
 
 import org.neo4j.api.core.NeoService;
@@ -56,6 +57,11 @@ public abstract class SetSamePropCase extends PropertyBenchCase
         {
             int max = getNumberOfIterations();
             Object propertyValue = getPropertyValue();
+            if ( getPropertyValue().getClass().isArray() )
+            {
+                int arraySize = Array.getLength( getPropertyValue() );
+                max /= arraySize;
+            }
             for ( int i = 0; i < max; i++ )
             {
                 container.setProperty( "my_key", propertyValue );

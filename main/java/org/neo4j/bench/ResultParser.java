@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.neo4j.bench.RunUtil.WeightedPattern;
 
 
 public class ResultParser
@@ -25,7 +26,7 @@ public class ResultParser
         String line = null;
         Map<String, String> header = null;
         
-        Map<Boolean, Collection<String>> benchCaseFilters =
+        WeightedPattern[] benchCaseFilters =
             RunUtil.loadFilters( options );
         String timerFilterString = options.get( RunUtil.KEY_TIMER_FILTER );
         timerFilterString = timerFilterString != null ? timerFilterString : "w";

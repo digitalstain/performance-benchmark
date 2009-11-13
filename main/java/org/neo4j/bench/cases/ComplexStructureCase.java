@@ -71,7 +71,7 @@ public class ComplexStructureCase extends AbstractBenchCase
                     tx = checkCommit( neo, tx, ++i );
                 }
                 
-                // Maybe connect it to other entities
+                // Connect it to other entities
                 if ( entityIds.size() > 10 )
                 {
                     int numberOfEntities = random.nextInt( 3 );
@@ -102,7 +102,7 @@ public class ComplexStructureCase extends AbstractBenchCase
         }
         
         // Traverse the structure
-        for ( int i = 0; i < 30; i++ )
+        for ( int i = 0; i < 5; i++ )
         {
             beginTransaction( TRAVERSE_TIMER );
             tx = neo.beginTx();

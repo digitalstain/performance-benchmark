@@ -49,7 +49,7 @@ public class RunUtil
         return result;
     }
     
-    public static Map<Boolean, Collection<String>> loadFilters(
+    public static WeightedPattern[] loadFilters(
         Map<String, String> arguments ) throws IOException
     {
         String filterFile = arguments.get( KEY_BENCH_FILTER_FILE );
@@ -58,8 +58,7 @@ public class RunUtil
             return null;
         }
         
-        Map<Boolean, Collection<String>> result =
-            new HashMap<Boolean, Collection<String>>();
+        Collection<WeightedPattern> result = new ArrayList<WeightedPattern>();
         BufferedReader reader = new BufferedReader(
             new FileReader( filterFile ) );
         String line = null;
@@ -72,21 +71,15 @@ public class RunUtil
             }
             
             char firstChar = line.charAt( 0 );
-            Boolean type = firstChar != '-';
-            Collection<String> lines = result.get( type );
-            if ( lines == null )
-            {
-                lines = new ArrayList<String>();
-                result.put( type, lines );
-            }
+            boolean type = firstChar != '-';
             if ( line.startsWith( "+" ) ||
                 line.startsWith( "-" ) )
             {
                 line = line.substring( 1 );
             }
-            lines.add( line );
+            result.add( new WeightedPattern( line, type ) );
         }
-        return result;
+        return result.toArray( new WeightedPattern[ result.size() ] );
     }
     
     public static Map<String, Collection<String>> loadAggregations(
@@ -145,34 +138,42 @@ public class RunUtil
         return true;
     }
     
-    public static boolean matches( Map<Boolean, Collection<String>> patterns,
-        String toMatch )
+    public static boolean matches( WeightedPattern[] patterns, String toMatch )
     {
         if ( patterns == null )
         {
             return true;
         }
         
-        String[] inclusionsPatters = patterns.get( true ) != null ?
-            patterns.get( true ).toArray( new String[ 0 ] ) : null;
-        String[] exclusionPatters = patterns.get( false ) != null ?
-            patterns.get( false ).toArray( new String[ 0 ] ) : null;
-        if ( exclusionPatters != null )
+        for ( WeightedPattern pattern : patterns )
         {
-            if ( matchesAny( exclusionPatters, toMatch ) )
+            if ( matches( pattern.pattern, toMatch ) )
             {
-                return false;
-            }
-        }
-        
-        if ( inclusionsPatters != null )
-        {
-            if ( matchesAny( inclusionsPatters, toMatch ) )
-            {
-                return true;
+                return pattern.trueForInclusive;
             }
         }
         return false;
+        
+//        String[] inclusionsPatters = patterns.get( true ) != null ?
+//            patterns.get( true ).toArray( new String[ 0 ] ) : null;
+//        String[] exclusionPatters = patterns.get( false ) != null ?
+//            patterns.get( false ).toArray( new String[ 0 ] ) : null;
+//        if ( exclusionPatters != null )
+//        {
+//            if ( matchesAny( exclusionPatters, toMatch ) )
+//            {
+//                return false;
+//            }
+//        }
+//        
+//        if ( inclusionsPatters != null )
+//        {
+//            if ( matchesAny( inclusionsPatters, toMatch ) )
+//            {
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     public static File getResultsFile( Map<String, String> arguments )
@@ -218,5 +219,27 @@ public class RunUtil
             result += " (" + shortenCount( numberOfIterations ) + ")";
         }
         return result;
+    }
+    
+    public static class WeightedPattern
+    {
+        private final String pattern;
+        private final boolean trueForInclusive;
+        
+        WeightedPattern( String pattern, boolean trueForInclusive )
+        {
+            this.pattern = pattern; 
+            this.trueForInclusive = trueForInclusive;
+        }
+
+        public String getPattern()
+        {
+            return pattern;
+        }
+
+        public boolean isTrueForInclusive()
+        {
+            return trueForInclusive;
+        }
     }
 }

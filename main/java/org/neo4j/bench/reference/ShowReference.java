@@ -18,8 +18,7 @@ public class ShowReference extends RunUtil
     {
         Map<String, String> arguments = parseArguments( args );
         final List<OneResultData> dataset = new ArrayList<OneResultData>();
-        final Map<Boolean, Collection<String>> benchFilters =
-            loadFilters( arguments );
+        final WeightedPattern[] benchFilters = loadFilters( arguments );
         final String timeFilter = arguments.get( KEY_TIMER_FILTER );
         final OneResultData[] referenceData = new OneResultData[ 1 ];
         final String[] referenceVersion = new String[ 1 ];

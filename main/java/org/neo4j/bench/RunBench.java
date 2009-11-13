@@ -48,7 +48,7 @@ public class RunBench extends RunUtil
         Collection<BenchCase> cases, Map<String, String> arguments )
         throws IOException
     {
-        Map<Boolean, Collection<String>> filters = loadFilters( arguments );
+        WeightedPattern[] filters = loadFilters( arguments );
         if ( filters == null )
         {
             return cases;
