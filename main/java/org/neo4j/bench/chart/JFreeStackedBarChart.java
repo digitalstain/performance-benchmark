@@ -1,4 +1,4 @@
-package org.neo4j.bench.graph;
+package org.neo4j.bench.chart;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -8,11 +8,9 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.AbstractRenderer;
 import org.neo4j.bench.RunUtil;
-import org.neo4j.bench.chart.ChartData;
-import org.neo4j.bench.chart.ChartDestination;
 
-public class JFreeStackedBarChartGraph extends
-    AbstractJFreeChartGraph<ChartData> implements ChartDestination<JFreeChart>
+public class JFreeStackedBarChart extends
+    AbstractJFreeChart<ChartData> implements ChartDestination<JFreeChart>
 {
     @Override
     protected void addValue( ChartData dataset, Map<String, String> header,

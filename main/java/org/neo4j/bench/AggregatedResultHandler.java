@@ -1,11 +1,9 @@
-package org.neo4j.bench.graph;
+package org.neo4j.bench;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.neo4j.bench.ResultHandler;
-import org.neo4j.bench.RunUtil;
 
 public class AggregatedResultHandler implements ResultHandler
 {

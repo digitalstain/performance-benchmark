@@ -1,11 +1,11 @@
-package org.neo4j.bench.graph;
+package org.neo4j.bench.chart;
 
 import java.io.File;
 import java.util.Map;
 
 import org.neo4j.bench.RunUtil;
 
-public class ShowGraph extends RunUtil
+public class GenerateChart extends RunUtil
 {
     public static void main( String[] args ) throws Exception
     {
@@ -14,14 +14,14 @@ public class ShowGraph extends RunUtil
         
         String layout = arguments.get( KEY_LAYOUT );
         layout = layout != null ? layout : "bar";
-        Graph graph = null;
+        Chart graph = null;
         if ( layout.equals( "bar" ) )
         {
-            graph = new JFreeBarChartGraph();
+            graph = new JFreeBarChart();
         }
         else if ( layout.equals( "stacked-bar" ) )
         {
-            graph = new JFreeStackedBarChartGraph();
+            graph = new JFreeStackedBarChart();
         }
         
         graph.open( file, arguments );

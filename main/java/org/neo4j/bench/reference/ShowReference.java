@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.neo4j.bench.AggregatedResultHandler;
 import org.neo4j.bench.ResultHandler;
 import org.neo4j.bench.ResultParser;
 import org.neo4j.bench.RunUtil;
-import org.neo4j.bench.graph.AggregatedResultHandler;
 
 public class ShowReference extends RunUtil
 {

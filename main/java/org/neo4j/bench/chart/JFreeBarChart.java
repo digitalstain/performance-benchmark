@@ -1,4 +1,4 @@
-package org.neo4j.bench.graph;
+package org.neo4j.bench.chart;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import org.jfree.data.general.AbstractDataset;
 import org.jfree.ui.TextAnchor;
 import org.neo4j.bench.RunUtil;
 
-public class JFreeBarChartGraph extends AbstractJFreeChartGraph<AbstractDataset>
+public class JFreeBarChart extends AbstractJFreeChart<AbstractDataset>
 {
     private List<Integer> numberOfIterationsList;
     

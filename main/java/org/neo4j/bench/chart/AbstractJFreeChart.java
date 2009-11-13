@@ -1,4 +1,4 @@
-package org.neo4j.bench.graph;
+package org.neo4j.bench.chart;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -14,13 +14,14 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
+import org.neo4j.bench.AggregatedResultHandler;
 import org.neo4j.bench.ResultHandler;
 import org.neo4j.bench.ResultParser;
 import org.neo4j.bench.RunUtil;
 
-public abstract class AbstractJFreeChartGraph<T> implements Graph
+public abstract class AbstractJFreeChart<T> implements Chart
 {
-    public AbstractJFreeChartGraph()
+    public AbstractJFreeChart()
     {
     }
     
