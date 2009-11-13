@@ -1,4 +1,4 @@
-package org.neo4j.bench.graph;
+package org.neo4j.bench;
 
 import java.util.Map;
 

@@ -21,6 +21,8 @@ public class RunUtil
     public static final String KEY_TIMER_FILTER = "timer-filter";
     public static final String KEY_AGGREGATIONS_FILE = "aggregations-file";
     public static final String KEY_LAYOUT = "layout";
+    public static final String KEY_DATE = "date";
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH-mm-ss";
     
     public static Map<String, String> parseArguments( String[] args )
     {

@@ -1,7 +1,5 @@
 package org.neo4j.bench;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -11,7 +9,6 @@ public class BenchCaseResult
 {
     public static final String MAGIC_HEADER_START = ">>>>>";
     public static final String MAGIC_HEADER_END = "<<<<<";
-    public static final String DATE_FORMAT = "yyyy-MM-dd HH-mm-ss";
     
     private final String name;
     private final Map<String, ResultData> data =
@@ -49,26 +46,6 @@ public class BenchCaseResult
         return this.data.get( timer );
     }
     
-//    @Override
-//    public String toString()
-//    {
-//        StringBuffer result = new StringBuffer();
-//        result.append( name + ":" );
-//        for ( Map.Entry<String, ResultHolder> entry : this.timers.entrySet() )
-//        {
-//            result.append( "\n\t" + entry.getKey() + ": " +
-//                formatTimeString( entry.getValue().value ) );
-//        }
-//        return result.toString();
-//    }
-//    
-//    private String formatTimeString( long time )
-//    {
-//        long asMillis = time / 1000000;
-//        long asSeconds = asMillis / 1000;
-//        return asSeconds + "s";
-//    }
-    
     public static String serializeHeaderString( Map<String, String> header )
     {
         StringBuffer data = new StringBuffer();
@@ -80,8 +57,6 @@ public class BenchCaseResult
             }
             data.append( entry.getKey() + ":" + entry.getValue() );
         }
-        data.append( ", date:" + new SimpleDateFormat(
-            DATE_FORMAT ).format( new Date() ) );
         return MAGIC_HEADER_START + data.toString() + MAGIC_HEADER_END;
     }
     

@@ -1,4 +1,4 @@
-package org.neo4j.bench.graph;
+package org.neo4j.bench;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.neo4j.bench.BenchCaseResult;
-import org.neo4j.bench.RunUtil;
 
 public class ResultParser
 {

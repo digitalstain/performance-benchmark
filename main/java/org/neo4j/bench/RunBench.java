@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -37,6 +39,8 @@ public class RunBench extends RunUtil
         Map<String, String> header = new HashMap<String, String>();
         header.put( KEY_NEO_VERSION,
             arguments.get( KEY_NEO_VERSION ) );
+        header.put( KEY_DATE,
+            new SimpleDateFormat( DATE_FORMAT ).format( new Date() ) );
         runner.displayResult( header, new TabFormatter(), out );
     }
     

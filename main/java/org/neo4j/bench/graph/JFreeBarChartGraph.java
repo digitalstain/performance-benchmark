@@ -74,10 +74,11 @@ public class JFreeBarChartGraph extends AbstractJFreeChartGraph<AbstractDataset>
         Map<String, String> header, double value, int numberOfIterations,
         String benchCase, String timer )
     {
-        ( ( DefaultCategoryDataset ) dataset ).addValue(
-            value, header.get( RunUtil.KEY_NEO_VERSION ),
-            RunUtil.getNiceBenchCaseName( benchCase, timer,
-                numberOfIterations ) );
+        DefaultCategoryDataset theDataset = ( DefaultCategoryDataset ) dataset;
+        String rowKey = header.get( RunUtil.KEY_NEO_VERSION );
+        String columnKey = RunUtil.getNiceBenchCaseName(
+            benchCase, timer, numberOfIterations );
+        theDataset.addValue( value, rowKey, columnKey );
         this.numberOfIterationsList.add( numberOfIterations );
     }
 }

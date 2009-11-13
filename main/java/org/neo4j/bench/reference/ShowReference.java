@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.neo4j.bench.ResultHandler;
+import org.neo4j.bench.ResultParser;
 import org.neo4j.bench.RunUtil;
 import org.neo4j.bench.graph.AggregatedResultHandler;
-import org.neo4j.bench.graph.ResultHandler;
-import org.neo4j.bench.graph.ResultParser;
 
 public class ShowReference extends RunUtil
 {
@@ -35,8 +35,7 @@ public class ShowReference extends RunUtil
                 {
                     referenceVersion[ 0 ] = version;
                 }
-                currentData = new OneResultData();
-                currentData.version = version;
+                currentData = new OneResultData( version );
                 dataset.add( currentData );
                 if ( referenceVersion[ 0 ].equals( version ) )
                 {
@@ -94,16 +93,34 @@ public class ShowReference extends RunUtil
                     ( double ) dataValue / ( double ) referenceValue;
                 percentage *= 100.0;
                 percentage = Math.round( percentage );
-                String alert = percentage >= 110 ? "  AAAAAAHHHHH" : "";
-                System.out.println( key + "\t\t" + percentage + "%" +
-                    alert );
+                System.out.println( key + "\t\t" +
+                    niceDeltaPercentage( percentage ) );
             }
         }
+    }
+    
+    private static String niceDeltaPercentage( double percentage )
+    {
+        percentage -= 100;
+        StringBuilder result = new StringBuilder();
+        result.append( percentage >= 0 ? "+" : "" );
+        result.append( percentage );
+        result.append( "%" );
+        if ( percentage > 10 )
+        {
+            result.append( " AAAHHHH!" );
+        }
+        return result.toString();
     }
 
     private static class OneResultData
     {
         private String version;
         private Map<String, Integer> values = new TreeMap<String, Integer>();
+        
+        OneResultData( String version )
+        {
+            this.version = version;
+        }
     }
 }

@@ -14,6 +14,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
+import org.neo4j.bench.ResultHandler;
+import org.neo4j.bench.ResultParser;
 import org.neo4j.bench.RunUtil;
 
 public abstract class AbstractJFreeChartGraph<T> implements Graph
