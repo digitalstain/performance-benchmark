@@ -34,7 +34,7 @@ public class ShowReference extends RunUtil
                 {
                     referenceVersion[ 0 ] = version;
                 }
-                currentData = new OneResultData( version );
+                currentData = new OneResultData( header );
                 dataset.add( currentData );
                 if ( referenceVersion[ 0 ].equals( version ) )
                 {
@@ -75,7 +75,8 @@ public class ShowReference extends RunUtil
     private static void calculateResults( List<OneResultData> dataset,
         OneResultData referenceData )
     {
-        System.out.println( "Reference version " + referenceData.version );
+        System.out.println( "Reference version " + referenceData.header.get(
+            RunUtil.KEY_NEO_VERSION ) );
         for ( OneResultData data : dataset )
         {
             if ( data == referenceData )
@@ -83,6 +84,8 @@ public class ShowReference extends RunUtil
                 continue;
             }
             
+            System.out.println();
+            System.out.println( "" + data.header );
             for ( Map.Entry<String, Integer> entry : data.values.entrySet() )
             {
                 String key = entry.getKey();
@@ -114,12 +117,12 @@ public class ShowReference extends RunUtil
 
     private static class OneResultData
     {
-        private String version;
+        private Map<String, String> header;
         private Map<String, Integer> values = new TreeMap<String, Integer>();
         
-        OneResultData( String version )
+        OneResultData( Map<String, String> header )
         {
-            this.version = version;
+            this.header = header;
         }
     }
 }
