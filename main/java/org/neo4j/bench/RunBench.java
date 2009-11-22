@@ -29,19 +29,31 @@ public class RunBench extends RunUtil
     public static void main( String[] args ) throws Exception
     {
         Map<String, String> arguments = parseArguments( args );
-        BenchCaseRunner runner = new BenchCaseRunner();
-        Collection<BenchCase> cases = instantiateAllCases( arguments );
-        cases = filterCases( cases, arguments );
-        runner.run( cases.toArray( new BenchCase[ 0 ] ) );
-        
+        BenchCaseRunner runner = run( arguments );
         PrintStream out = new PrintStream( new FileOutputStream(
             getResultsFile( arguments ), true ) );
+        Map<String, String> header = getHeader( arguments );
+        runner.displayResult( header, new TabFormatter(), out );
+    }
+    
+    public static Map<String, String> getHeader( Map<String, String> arguments )
+    {
         Map<String, String> header = new HashMap<String, String>();
         header.put( KEY_NEO_VERSION,
             arguments.get( KEY_NEO_VERSION ) );
         header.put( KEY_DATE,
             new SimpleDateFormat( DATE_FORMAT ).format( new Date() ) );
-        runner.displayResult( header, new TabFormatter(), out );
+        return header;
+    }
+    
+    public static BenchCaseRunner run( Map<String, String> arguments )
+        throws Exception
+    {
+        BenchCaseRunner runner = new BenchCaseRunner();
+        Collection<BenchCase> cases = instantiateAllCases( arguments );
+        cases = filterCases( cases, arguments );
+        runner.run( cases.toArray( new BenchCase[ 0 ] ) );
+        return runner;
     }
     
     private static Collection<BenchCase> filterCases(

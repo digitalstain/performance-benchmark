@@ -53,6 +53,7 @@ public class RunUtil
         Map<String, String> arguments ) throws IOException
     {
         String filterFile = arguments.get( KEY_BENCH_FILTER_FILE );
+        filterFile = filterFile != null ? filterFile : "default-bench-filter";
         if ( filterFile == null || !new File( filterFile ).exists() )
         {
             return null;
