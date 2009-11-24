@@ -3,6 +3,7 @@ package org.neo4j.bench.chart;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -27,7 +28,7 @@ public abstract class AbstractJFreeChart<T> implements Chart
     
     protected abstract T instantiateDataset();
     
-    public void open( File file, Map<String, String> options )
+    public void open( Reader input, Map<String, String> options )
         throws IOException
     {
         final T dataset = instantiateDataset();
@@ -57,7 +58,7 @@ public abstract class AbstractJFreeChart<T> implements Chart
         }
         
         ResultParser parser = new ResultParser( handler );
-        parser.parse( file, options );
+        parser.parse( input, options );
 
         JFreeChart chart = createChart( dataset );
         ChartPanel chartPanel = new ChartPanel( chart );

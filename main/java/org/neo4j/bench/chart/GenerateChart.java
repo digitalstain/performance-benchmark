@@ -1,6 +1,7 @@
 package org.neo4j.bench.chart;
 
 import java.io.File;
+import java.io.FileReader;
 import java.util.Map;
 
 import org.neo4j.bench.RunUtil;
@@ -24,6 +25,6 @@ public class GenerateChart extends RunUtil
             graph = new JFreeStackedBarChart();
         }
         
-        graph.open( file, arguments );
+        graph.open( new FileReader( file ), arguments );
     }
 }

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -19,10 +20,10 @@ public class ResultParser
         this.handler = handler;
     }
     
-    public void parse( File file, Map<String, String> options )
+    public void parse( Reader input, Map<String, String> options )
         throws IOException
     {
-        BufferedReader reader = new BufferedReader( new FileReader( file ) );
+        BufferedReader reader = new BufferedReader( input );
         String line = null;
         Map<String, String> header = null;
         

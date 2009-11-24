@@ -1,6 +1,7 @@
 package org.neo4j.bench.reference;
 
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -67,7 +68,7 @@ public class ShowReference extends RunUtil
         }
         
         File file = getResultsFile( arguments );
-        new ResultParser( handler ).parse( file, arguments );
+        new ResultParser( handler ).parse( new FileReader( file ), arguments );
         
         calculateResults( dataset, referenceData[ 0 ] );
     }
