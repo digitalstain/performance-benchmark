@@ -27,12 +27,15 @@ public class RemoteServlet extends HttpServlet
     protected void doGet( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
     {
+        verifySharedSecret( req );
+        
         System.out.println( "got request:" + req.getPathInfo() );
         String command = req.getPathInfo();
         if ( command.equals( "/run" ) )
         {
             Map<String, String> requestArguments = composeArguments( req );
-            runExternalProcess( requestArguments );
+            runSvnUpProcess();
+            runExternalBenchProcess( requestArguments );
             String results = requestArguments.get( RunUtil.KEY_RESULTS_FILE );
             File resultsFile = new File( results );
             if ( !resultsFile.exists() )
@@ -70,7 +73,51 @@ public class RemoteServlet extends HttpServlet
         }
     }
 
-    private void runExternalProcess( Map<String, String> requestArguments )
+    private void verifySharedSecret( HttpServletRequest req )
+        throws ServletException, IOException
+    {
+        File secretFile = new File( "secret" );
+        if ( !secretFile.exists() )
+        {
+            // If no secret is specified then there's no security check.
+            return;
+        }
+        
+        BufferedReader reader = null;
+        try
+        {
+            reader = new BufferedReader( new FileReader( secretFile ) );
+            String secret = reader.readLine();
+            String secretFromRequest = req.getParameter( "secret" );
+            if ( secretFromRequest == null || !secret.equals( secretFromRequest ) )
+            {
+                throw new ServletException( "Invalid secret" );
+            }
+        }
+        finally
+        {
+            reader.close();
+        }
+    }
+
+    private void runSvnUpProcess() throws ServletException, IOException
+    {
+        try
+        {
+            Process process = Runtime.getRuntime().exec( new String[] {
+                "svn",
+                "up",
+                new File( "." ).getAbsolutePath(),
+            } );
+            process.waitFor();
+        }
+        catch ( InterruptedException e )
+        {
+            throw new ServletException( e );
+        }
+    }
+
+    private void runExternalBenchProcess( Map<String, String> requestArguments )
         throws ServletException, IOException
     {
         try
