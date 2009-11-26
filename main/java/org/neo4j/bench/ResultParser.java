@@ -1,15 +1,12 @@
 package org.neo4j.bench;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.neo4j.bench.RunUtil.WeightedPattern;
-
 
 public class ResultParser
 {

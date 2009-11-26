@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.neo4j.bench.RunBench;
 import org.neo4j.bench.RunUtil;
 
 public class RemoteServlet extends HttpServlet
