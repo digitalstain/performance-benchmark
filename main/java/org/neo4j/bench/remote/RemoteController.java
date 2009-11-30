@@ -1,11 +1,11 @@
 package org.neo4j.bench.remote;
 
-import java.io.FileInputStream;
-import java.util.Properties;
+import java.util.Map;
 
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.servlet.ServletHandler;
+import org.neo4j.bench.RunUtil;
 
 public class RemoteController
 {
@@ -34,12 +34,14 @@ public class RemoteController
     
     public static void main( String[] args ) throws Exception
     {
-        Properties config = new Properties();
-        config.load( new FileInputStream( "remote-config.properties" ) );
+        Map<String, String> arguments = RunUtil.parseArguments( args );
+        String portString = arguments.get( "port" );
+        portString = portString != null ? portString : "8080";
         RemoteController server = new RemoteController(
-            Integer.parseInt( config.getProperty( "port", "8080" ) ) );
+            Integer.parseInt( portString ) );
         server.start();
-        System.out.println( "Remote controller started..." );
+        System.out.println( "Remote controller started, you can reach it at " +
+        	"http://<host>:" + portString + "/run" );
         try
         {
             while ( true )
