@@ -6,7 +6,7 @@
 	</parent>
 	
 	<properties>
-		<neo-version>1.0-b11-SNAPSHOT</neo-version>
+		<neo-version>1.0-SNAPSHOT</neo-version>
 		<jvm-memory>768M</jvm-memory>
 		<run-main-class>Please supply it via argument</run-main-class>
 		<timer-filter></timer-filter>
@@ -19,12 +19,12 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.neo4j</groupId>
-	<artifactId>neo-bench</artifactId>
+	<artifactId>neo4j-bench</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.neo4j</groupId>
-			<artifactId>neo</artifactId>
+			<artifactId>neo4j-kernel</artifactId>
 			<version>${neo-version}</version>
 		</dependency>
 		<dependency>
