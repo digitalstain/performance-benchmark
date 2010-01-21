@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# There's a bug in the mvn exec plugin argument parser which gets an exception
+# if the arguments ends in a whitespace
+if [ -z "$@" ]; then
+	mvn exec:exec -Dexec.args="-cp %classpath org.neo4j.bench.remote.RemoteController"
+else
+	mvn exec:exec -Dexec.args="-cp %classpath org.neo4j.bench.remote.RemoteController $@"
+fi
