@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.PropertyContainer;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * o Add many new properties (on many different containers) in one tx
@@ -25,14 +25,14 @@ public abstract class AddRemovePropsCase
         super( iterationCountConfig, value );
     }
 
-    public void run( NeoService neo )
+    public void run( GraphDatabaseService graphDb )
     {
         timerOff( MAIN_TIMER );
         PropertyContainer[] containers = null;
-        Transaction tx = neo.beginTx();
+        Transaction tx = graphDb.beginTx();
         try
         {
-            containers = createContainers( neo, getNumberOfContainers() );
+            containers = createContainers( graphDb, getNumberOfContainers() );
             tx.success();
         }
         finally
@@ -42,7 +42,7 @@ public abstract class AddRemovePropsCase
         timerOn( MAIN_TIMER );
         
         beginTransaction( SET_TIMER );
-        tx = neo.beginTx();
+        tx = graphDb.beginTx();
         try
         {
             for ( PropertyContainer container : containers )
@@ -61,7 +61,7 @@ public abstract class AddRemovePropsCase
 
         Iterable<Integer> randomInts = generateRandomInts();
         beginTransaction( REMOVE_TIMER );
-        tx = neo.beginTx();
+        tx = graphDb.beginTx();
         try
         {
             for ( PropertyContainer container : containers )
@@ -97,5 +97,5 @@ public abstract class AddRemovePropsCase
     }
 
     protected abstract PropertyContainer[] createContainers(
-        NeoService neo, int count );
+        GraphDatabaseService graphDb, int count );
 }

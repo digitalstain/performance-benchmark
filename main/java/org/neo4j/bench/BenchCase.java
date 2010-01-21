@@ -1,6 +1,6 @@
 package org.neo4j.bench;
 
-import org.neo4j.api.core.NeoService;
+import org.neo4j.graphdb.GraphDatabaseService;
 
 public interface BenchCase
 {
@@ -8,7 +8,7 @@ public interface BenchCase
     
     int getNumberOfIterations();
     
-    void run( NeoService neo );
+    void run( GraphDatabaseService graphDb );
     
     void timerOn( String whichTimer );
     

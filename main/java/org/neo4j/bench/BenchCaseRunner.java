@@ -5,33 +5,33 @@ import java.io.PrintStream;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.neo4j.api.core.EmbeddedNeo;
-import org.neo4j.api.core.NeoService;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 public class BenchCaseRunner
 {
-    private NeoService neo;
+    private GraphDatabaseService graphDb;
     private final Map<String, BenchCaseResult> results =
         new TreeMap<String, BenchCaseResult>();
     
-    protected NeoService instantiateNeoService()
+    protected GraphDatabaseService instantiateGraphDbService()
     {
-        return new EmbeddedNeo( getNeoPath() );
+        return new EmbeddedGraphDatabase( getGraphDbPath() );
     }
     
-    protected NeoService getNeoService()
+    protected GraphDatabaseService getGraphDbService()
     {
-        return this.neo;
+        return this.graphDb;
     }
     
-    protected String getNeoPath()
+    protected String getGraphDbPath()
     {
-        return "neo";
+        return "neo4j";
     }
     
     protected void beforeCase( BenchCase benchCase )
     {
-        File neoDir = new File( getNeoPath() );
+        File neoDir = new File( getGraphDbPath() );
         if ( neoDir.exists() )
         {
             for ( File neoFile : neoDir.listFiles() )
@@ -42,12 +42,12 @@ public class BenchCaseRunner
                 }
             }
         }
-        neo = instantiateNeoService();
+        graphDb = instantiateGraphDbService();
     }
     
     protected void afterCase( BenchCase benchCase )
     {
-        neo.shutdown();
+        graphDb.shutdown();
     }
 
     public void run( BenchCase... benchCases )
@@ -62,7 +62,7 @@ public class BenchCaseRunner
                 ", with size " + RunUtil.shortenCount(
                     benchCase.getNumberOfIterations() ) );
             benchCase.timerOn( BenchCase.MAIN_TIMER );
-            benchCase.run( this.neo );
+            benchCase.run( this.graphDb );
             benchCase.timerOff( BenchCase.MAIN_TIMER );
             afterCase( benchCase );
             

@@ -3,9 +3,9 @@ package org.neo4j.bench.cases;
 import java.lang.reflect.Array;
 import java.util.Properties;
 
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.PropertyContainer;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * A super class for setting a property on the same container with the same key
@@ -37,13 +37,13 @@ public abstract class SetSamePropCase extends PropertyBenchCase
         return result;
     }
 
-    public void run( NeoService neo )
+    public void run( GraphDatabaseService graphDb )
     {
         timerOff( MAIN_TIMER );
-        Transaction tx = neo.beginTx();
+        Transaction tx = graphDb.beginTx();
         try
         {
-            this.container = createContainer( neo );
+            this.container = createContainer( graphDb );
             tx.success();
         }
         finally
@@ -52,7 +52,7 @@ public abstract class SetSamePropCase extends PropertyBenchCase
         }
         timerOn( MAIN_TIMER );
         
-        tx = neo.beginTx();
+        tx = graphDb.beginTx();
         try
         {
             int max = getNumberOfIterations();
@@ -75,5 +75,6 @@ public abstract class SetSamePropCase extends PropertyBenchCase
         container = null;
     }
     
-    protected abstract PropertyContainer createContainer( NeoService neo );
+    protected abstract PropertyContainer createContainer(
+            GraphDatabaseService graphDb );
 }

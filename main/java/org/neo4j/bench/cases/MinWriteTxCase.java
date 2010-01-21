@@ -2,8 +2,8 @@ package org.neo4j.bench.cases;
 
 import java.util.Properties;
 
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * Creates many nodes in separate tx:s, effectively testing the transaction
@@ -16,15 +16,15 @@ public class MinWriteTxCase extends AbstractBenchCase
         super( iterationCountConfig );
     }
 
-    public void run( NeoService neo )
+    public void run( GraphDatabaseService graphDb )
     {
         int max = getNumberOfIterations();
         for ( int i = 0; i < max; i++ )
         {
-            Transaction tx = neo.beginTx();
+            Transaction tx = graphDb.beginTx();
             try
             {
-                neo.createNode();
+                graphDb.createNode();
                 tx.success();
             }
             finally

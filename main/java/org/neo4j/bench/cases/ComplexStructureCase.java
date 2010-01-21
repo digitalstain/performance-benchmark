@@ -8,17 +8,17 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.neo4j.api.core.Direction;
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Relationship;
-import org.neo4j.api.core.RelationshipType;
-import org.neo4j.api.core.ReturnableEvaluator;
-import org.neo4j.api.core.StopEvaluator;
-import org.neo4j.api.core.Transaction;
-import org.neo4j.api.core.TraversalPosition;
-import org.neo4j.api.core.Traverser;
-import org.neo4j.api.core.Traverser.Order;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.ReturnableEvaluator;
+import org.neo4j.graphdb.StopEvaluator;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.TraversalPosition;
+import org.neo4j.graphdb.Traverser;
+import org.neo4j.graphdb.Traverser.Order;
 
 public class ComplexStructureCase extends AbstractBenchCase
 {
@@ -38,23 +38,23 @@ public class ComplexStructureCase extends AbstractBenchCase
         super( iterationCountConfig );
     }
 
-    public void run( NeoService neo )
+    public void run( GraphDatabaseService graphDb )
     {
         List<Long> entityIds = new ArrayList<Long>();
         Random random = new Random();
         Node subref = null;
         
         beginTransaction( CREATE_TIMER );
-        Transaction tx = neo.beginTx();
+        Transaction tx = graphDb.beginTx();
         try
         {
-            subref = neo.createNode();
-            neo.getReferenceNode().createRelationshipTo( subref,
+            subref = graphDb.createNode();
+            graphDb.getReferenceNode().createRelationshipTo( subref,
                 RelTypes.SUBREF );
             for ( int i = 0; i < this.getNumberOfIterations(); )
             {
                 // Create one entity
-                Node entity = neo.createNode();
+                Node entity = graphDb.createNode();
                 subref.createRelationshipTo( entity, RelTypes.ENTITY );
                 entityIds.add( entity.getId() );
                 String name = "http://neo4j.org#" + entity.getId();
@@ -64,11 +64,11 @@ public class ComplexStructureCase extends AbstractBenchCase
                 int numberOfProperties = random.nextInt( 10 );
                 for ( int p = 0; p < numberOfProperties; p++ )
                 {
-                    Node property = neo.createNode();
+                    Node property = graphDb.createNode();
                     entity.createRelationshipTo( property,
                         RelTypes.ENTITY_HAS_PROPERTY );
                     property.setProperty( "value", random.nextLong() );
-                    tx = checkCommit( neo, tx, ++i );
+                    tx = checkCommit( graphDb, tx, ++i );
                 }
                 
                 // Connect it to other entities
@@ -86,13 +86,13 @@ public class ComplexStructureCase extends AbstractBenchCase
                             continue;
                         }
                         
-                        Node otherEntity = neo.getNodeById( otherEntityId );
+                        Node otherEntity = graphDb.getNodeById( otherEntityId );
                         entity.createRelationshipTo( otherEntity,
                             RelTypes.ENTITY_HAS_ENTITY );
-                        tx = checkCommit( neo, tx, ++i );
+                        tx = checkCommit( graphDb, tx, ++i );
                     }
                 }
-                tx = checkCommit( neo, tx, ++i );
+                tx = checkCommit( graphDb, tx, ++i );
             }
             tx.success();
         }
@@ -105,16 +105,16 @@ public class ComplexStructureCase extends AbstractBenchCase
         for ( int i = 0; i < 5; i++ )
         {
             beginTransaction( TRAVERSE_TIMER );
-            tx = neo.beginTx();
+            tx = graphDb.beginTx();
             try
             {
                 AtomicInteger counter = new AtomicInteger();
                 int max = getNumberOfIterations();
                 while ( counter.get() < max )
                 {
-                    Node startEntity = neo.getNodeById( entityIds.get(
+                    Node startEntity = graphDb.getNodeById( entityIds.get(
                         random.nextInt( entityIds.size() ) ) );
-                    Node goalEntity = neo.getNodeById( entityIds.get(
+                    Node goalEntity = graphDb.getNodeById( entityIds.get(
                         random.nextInt( entityIds.size() ) ) );
                     TheEvaluator evaluator = new TheEvaluator( counter, max );
                     Traverser traverser = startEntity.traverse(
@@ -137,13 +137,13 @@ public class ComplexStructureCase extends AbstractBenchCase
         
         // Cleanup
         timerOff( MAIN_TIMER );
-        tx = neo.beginTx();
+        tx = graphDb.beginTx();
         try
         {
             int counter = 0;
             for ( long nodeId : entityIds )
             {
-                Node node = neo.getNodeById( nodeId );
+                Node node = graphDb.getNodeById( nodeId );
                 for ( Relationship rel : node.getRelationships(
                     RelTypes.ENTITY_HAS_PROPERTY, Direction.OUTGOING ) )
                 {
@@ -158,9 +158,9 @@ public class ComplexStructureCase extends AbstractBenchCase
                 node.getSingleRelationship( RelTypes.ENTITY,
                     Direction.INCOMING ).delete();
                 node.delete();
-                tx = checkCommit( neo, tx, counter++ );
+                tx = checkCommit( graphDb, tx, counter++ );
             }
-            neo.getReferenceNode().getSingleRelationship(
+            graphDb.getReferenceNode().getSingleRelationship(
                 RelTypes.SUBREF, Direction.OUTGOING ).delete();
             subref.delete();
             tx.success();
@@ -172,13 +172,14 @@ public class ComplexStructureCase extends AbstractBenchCase
         timerOn( MAIN_TIMER );
     }
     
-    private Transaction checkCommit( NeoService neo, Transaction tx, int i )
+    private Transaction checkCommit( GraphDatabaseService graphDb,
+            Transaction tx, int i )
     {
         if ( i % 1000 == 0 )
         {
             tx.success();
             tx.finish();
-            tx = neo.beginTx();
+            tx = graphDb.beginTx();
         }
         return tx;
     }

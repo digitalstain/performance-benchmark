@@ -2,8 +2,8 @@ package org.neo4j.bench.cases;
 
 import java.util.Properties;
 
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.PropertyContainer;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.PropertyContainer;
 
 public class SetSameNodePropCase extends SetSamePropCase
 {
@@ -15,8 +15,8 @@ public class SetSameNodePropCase extends SetSamePropCase
     }
 
     @Override
-    protected PropertyContainer createContainer( NeoService neo )
+    protected PropertyContainer createContainer( GraphDatabaseService graphDb )
     {
-        return neo.createNode();
+        return graphDb.createNode();
     }
 }

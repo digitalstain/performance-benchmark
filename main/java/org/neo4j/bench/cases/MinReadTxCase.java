@@ -2,9 +2,9 @@ package org.neo4j.bench.cases;
 
 import java.util.Properties;
 
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * Many getNodeById in separate tx:s
@@ -16,12 +16,12 @@ public class MinReadTxCase extends AbstractBenchCase
         super( iterationCountConfig );
     }
 
-    private Node createANode( NeoService neo )
+    private Node createANode( GraphDatabaseService graphDb )
     {
-        Transaction tx = neo.beginTx();
+        Transaction tx = graphDb.beginTx();
         try
         {
-            Node result = neo.createNode();
+            Node result = graphDb.createNode();
             tx.success();
             return result;
         }
@@ -31,20 +31,20 @@ public class MinReadTxCase extends AbstractBenchCase
         }
     }
 
-    public void run( NeoService neo )
+    public void run( GraphDatabaseService graphDb )
     {
         timerOff( MAIN_TIMER );
-        Node theNode = createANode( neo );
+        Node theNode = createANode( graphDb );
         timerOn( MAIN_TIMER );
         
         int max = getNumberOfIterations();
         long theNodeId = theNode.getId();
         for ( int i = 0; i < max; i++ )
         {
-            Transaction tx = neo.beginTx();
+            Transaction tx = graphDb.beginTx();
             try
             {
-                neo.getNodeById( theNodeId );
+                graphDb.getNodeById( theNodeId );
                 tx.success();
             }
             finally

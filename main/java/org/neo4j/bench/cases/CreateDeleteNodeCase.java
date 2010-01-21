@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
 
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * Create/delete many nodes in one tx.
@@ -27,17 +27,17 @@ public class CreateDeleteNodeCase extends AbstractBenchCase
         super( iterationCountConfig );
     }
     
-    public void run( NeoService neo )
+    public void run( GraphDatabaseService graphDb )
     {
         beginTransaction( CREATE_TIMER );
         Collection<Node> nodes = new ArrayList<Node>();
-        Transaction tx = neo.beginTx();
+        Transaction tx = graphDb.beginTx();
         try
         {
             int max = getNumberOfIterations();
             for ( int i = 0; i < max; i++ )
             {
-                nodes.add( neo.createNode() );
+                nodes.add( graphDb.createNode() );
             }
             tx.success();
         }
@@ -47,12 +47,12 @@ public class CreateDeleteNodeCase extends AbstractBenchCase
         }
         
         timerOn( GET_TIMER );
-        tx = neo.beginTx();
+        tx = graphDb.beginTx();
         try
         {
             for ( Node node : nodes )
             {
-                neo.getNodeById( node.getId() );
+                graphDb.getNodeById( node.getId() );
             }
             tx.success();
         }
@@ -63,7 +63,7 @@ public class CreateDeleteNodeCase extends AbstractBenchCase
         timerOff( GET_TIMER );
         
         beginTransaction( DELETE_TIMER );
-        tx = neo.beginTx();
+        tx = graphDb.beginTx();
         try
         {
             for ( Node node : nodes )

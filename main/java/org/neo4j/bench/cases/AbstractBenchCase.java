@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.neo4j.api.core.Transaction;
 import org.neo4j.bench.BenchCase;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * The abstract super class of (probably) all the cases

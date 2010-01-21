@@ -2,12 +2,12 @@ package org.neo4j.bench.cases;
 
 import java.util.Properties;
 
-import org.neo4j.api.core.DynamicRelationshipType;
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Relationship;
-import org.neo4j.api.core.RelationshipType;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * Create/delete many relationships in one tx.
@@ -28,10 +28,10 @@ public class CreateDeleteRelsCase extends AbstractBenchCase
         super( iterationCountConfig );
     }
 
-    public void run( NeoService neo )
+    public void run( GraphDatabaseService graphDb )
     {
         int max = getNumberOfIterations();
-        Transaction tx = neo.beginTx();
+        Transaction tx = graphDb.beginTx();
         Node node1 = null;
         Node node2 = null;
         RelationshipType type = DynamicRelationshipType.withName(
@@ -39,8 +39,8 @@ public class CreateDeleteRelsCase extends AbstractBenchCase
         try
         {
             timerOff( MAIN_TIMER );
-            node1 = neo.createNode();
-            node2 = neo.createNode();
+            node1 = graphDb.createNode();
+            node2 = graphDb.createNode();
             timerOn( MAIN_TIMER );
             
             beginTransaction( CREATE_TIMER );
@@ -56,7 +56,7 @@ public class CreateDeleteRelsCase extends AbstractBenchCase
         }
         
         timerOn( GET_TIMER );
-        tx = neo.beginTx();
+        tx = graphDb.beginTx();
         try
         {
             for ( int i = 0; i < 50; i++ )
@@ -75,7 +75,7 @@ public class CreateDeleteRelsCase extends AbstractBenchCase
         timerOff( GET_TIMER );
         
         beginTransaction( DELETE_TIMER );
-        tx = neo.beginTx();
+        tx = graphDb.beginTx();
         try
         {
             for ( Relationship rel : node1.getRelationships() )
