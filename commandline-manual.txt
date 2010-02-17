@@ -1,7 +1,7 @@
 A little command line manual for using the neo-bench component
 --------------------------------------------------------------
 
-Using the neo-bench components is comprised by calling one or more shell scripts
+Using the benchmark components is comprised by calling one or more shell scripts
 They really just forwards the calls to maven and the maven exec plugin so all
 arguments passed to the scripts must be in the form -D<key>=<value>
 
@@ -28,6 +28,7 @@ Running the bench cases
 		A plain-text file with a list of regex patterns. A bench case will
 		be performed if any of those patterns matches its name
 		(not the class name, the one returned from its #toString() method)
+		If a line starts with a '-' then it's excluded. 
 	o iterations-file:
 		A plain-text file containing <key>=<value> pairs with configuration
 		about the number of iterations each case will perform. The easiest way
@@ -74,7 +75,7 @@ Generating references
 	With that same generated bench data you can generate a simple and quick
 	reference between the different result sets in the results file and see
 	percentages between them. It can also alert you if f.ex. a later version
-	of neo is slower than a previous version.
+	of neo4j is slower than a previous version.
 	
 	Examples:
 	
@@ -85,7 +86,7 @@ Generating references
 	Argument information:
 	
 	o neo-version:
-		Which neo version (in the results file) should be the reference version
+		Which neo4j version (in the results file) should be the reference version
 		with which the others are compared.
 	o bench-filter-file:
 		See above
