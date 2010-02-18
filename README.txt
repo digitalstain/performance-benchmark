@@ -1,5 +1,5 @@
-A little command line manual for using the neo-bench component
---------------------------------------------------------------
+A little command line manual for using the performance benchmarks
+-----------------------------------------------------------------
 
 Using the benchmark components is comprised by calling one or more shell scripts
 They really just forwards the calls to maven and the maven exec plugin so all
