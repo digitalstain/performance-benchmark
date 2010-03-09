@@ -19,7 +19,7 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.neo4j</groupId>
-	<artifactId>neo4j-bench</artifactId>
+	<artifactId>peformance-benchmark</artifactId>
 
 	<dependencies>
 		<dependency>
