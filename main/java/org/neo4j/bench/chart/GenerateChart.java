@@ -2,19 +2,18 @@ package org.neo4j.bench.chart;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.Map;
 
 import org.neo4j.bench.RunUtil;
+import org.neo4j.helpers.Args;
 
 public class GenerateChart extends RunUtil
 {
     public static void main( String[] args ) throws Exception
     {
-        Map<String, String> arguments = parseArguments( args );
+        Args arguments = new Args( args );
         File file = RunUtil.getResultsFile( arguments );
         
-        String layout = arguments.get( KEY_LAYOUT );
-        layout = layout != null ? layout : "bar";
+        String layout = arguments.get( KEY_LAYOUT, "bar" );
         Chart graph = null;
         if ( layout.equals( "bar" ) )
         {

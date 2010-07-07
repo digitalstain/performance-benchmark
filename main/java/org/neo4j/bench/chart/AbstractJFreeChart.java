@@ -19,6 +19,7 @@ import org.neo4j.bench.AggregatedResultHandler;
 import org.neo4j.bench.ResultHandler;
 import org.neo4j.bench.ResultParser;
 import org.neo4j.bench.RunUtil;
+import org.neo4j.helpers.Args;
 
 public abstract class AbstractJFreeChart<T> implements Chart
 {
@@ -28,8 +29,7 @@ public abstract class AbstractJFreeChart<T> implements Chart
     
     protected abstract T instantiateDataset();
     
-    public void open( Reader input, Map<String, String> options )
-        throws IOException
+    public void open( Reader input, Args options ) throws IOException
     {
         final T dataset = instantiateDataset();
         ResultHandler handler = new ResultHandler()
@@ -50,8 +50,7 @@ public abstract class AbstractJFreeChart<T> implements Chart
             }
         };
         
-        Map<String, Collection<String>> aggregations =
-            RunUtil.loadAggregations( options );
+        Map<String, Collection<String>> aggregations = RunUtil.loadAggregations( options );
         if ( aggregations != null )
         {
             handler = new AggregatedResultHandler( handler, aggregations );

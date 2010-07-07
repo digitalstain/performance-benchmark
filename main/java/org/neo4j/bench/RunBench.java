@@ -24,12 +24,13 @@ import org.neo4j.bench.cases.MinWriteTxCase;
 import org.neo4j.bench.cases.SetSameNodePropCase;
 import org.neo4j.bench.cases.SetSameRelPropCase;
 import org.neo4j.bench.cases.ValueGenerator;
+import org.neo4j.helpers.Args;
 
 public class RunBench extends RunUtil
 {
     public static void main( String[] args ) throws Exception
     {
-        Map<String, String> arguments = parseArguments( args );
+        Args arguments = new Args( args );
         BenchCaseRunner runner = run( arguments );
         PrintStream out = new PrintStream( new FileOutputStream(
             getResultsFile( arguments ), true ) );
@@ -37,17 +38,15 @@ public class RunBench extends RunUtil
         runner.displayResult( header, new TabFormatter(), out );
     }
     
-    public static Map<String, String> getHeader( Map<String, String> arguments )
+    public static Map<String, String> getHeader( Args arguments )
     {
         Map<String, String> header = new HashMap<String, String>();
-        header.put( KEY_NEO_VERSION,
-            arguments.get( KEY_NEO_VERSION ) );
-        header.put( KEY_DATE,
-            new SimpleDateFormat( DATE_FORMAT ).format( new Date() ) );
+        header.put( KEY_NEO_VERSION, arguments.get( KEY_NEO_VERSION, null ) );
+        header.put( KEY_DATE, new SimpleDateFormat( DATE_FORMAT ).format( new Date() ) );
         return header;
     }
     
-    public static BenchCaseRunner run( Map<String, String> arguments )
+    public static BenchCaseRunner run( Args arguments )
         throws Exception
     {
         BenchCaseRunner runner = new BenchCaseRunner();
@@ -58,8 +57,7 @@ public class RunBench extends RunUtil
     }
     
     private static Collection<BenchCase> filterCases(
-        Collection<BenchCase> cases, Map<String, String> arguments )
-        throws IOException
+        Collection<BenchCase> cases, Args arguments ) throws IOException
     {
         WeightedPattern[] filters = loadFilters( arguments );
         if ( filters == null )
@@ -78,13 +76,11 @@ public class RunBench extends RunUtil
         return result;
     }
 
-    private static Properties loadIterationsConfig(
-        Map<String, String> arguments ) throws IOException
+    private static Properties loadIterationsConfig( Args arguments ) throws IOException
     {
         String iterationCountsConfigFileName =
-            arguments.get( KEY_ITERATIONS_FILE );
-        iterationCountsConfigFileName = iterationCountsConfigFileName != null ?
-            iterationCountsConfigFileName : "iterations.properties";
+            arguments.get( KEY_ITERATIONS_FILE, "iterations.properties" );
+        System.out.println( "itr:" + iterationCountsConfigFileName );
         Properties iterationCounts = null;
         iterationCounts = new Properties();
         iterationCounts.load( new FileInputStream(
@@ -93,7 +89,7 @@ public class RunBench extends RunUtil
     }
     
     private static Collection<BenchCase> instantiateAllCases(
-        Map<String, String> arguments ) throws IOException
+        Args arguments ) throws IOException
     {
         Collection<BenchCase> cases = new ArrayList<BenchCase>();
         Object[] propertyValues = new Object[] {

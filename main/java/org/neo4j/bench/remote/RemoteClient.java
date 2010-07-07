@@ -6,13 +6,13 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
 import java.util.Properties;
 
 import org.neo4j.bench.RunUtil;
 import org.neo4j.bench.chart.Chart;
 import org.neo4j.bench.chart.JFreeBarChart;
 import org.neo4j.bench.chart.JFreeStackedBarChart;
+import org.neo4j.helpers.Args;
 
 public class RemoteClient extends RunUtil
 {
@@ -55,7 +55,7 @@ public class RemoteClient extends RunUtil
 
     public static void main( String[] args ) throws Exception
     {
-        Map<String, String> arguments = parseArguments( args );
+        Args arguments = new Args( args );
 
         Properties config = new Properties();
         config.load( new FileInputStream( "remote-config.properties" ) );
@@ -64,16 +64,10 @@ public class RemoteClient extends RunUtil
             "localhost" ), Integer.parseInt( config
             .getProperty( "port", "8080" ) ), config.getProperty( "root", "/" ) );
 
-        String version = arguments.get( KEY_NEO_VERSION );
-        if ( version == null )
-        {
-            version = "1.0-b10";
-        }
-
+        String version = arguments.get( KEY_NEO_VERSION, "1.0" );
         Reader result = client.run( version );
 
-        String layout = arguments.get( KEY_LAYOUT );
-        layout = layout != null ? layout : "bar";
+        String layout = arguments.get( KEY_LAYOUT, "bar" );
         Chart graph = null;
         if ( layout.equals( "bar" ) )
         {

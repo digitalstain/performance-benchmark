@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.neo4j.bench.RunUtil.WeightedPattern;
+import org.neo4j.helpers.Args;
 
 public class ResultParser
 {
@@ -17,17 +18,14 @@ public class ResultParser
         this.handler = handler;
     }
     
-    public void parse( Reader input, Map<String, String> options )
-        throws IOException
+    public void parse( Reader input, Args options ) throws IOException
     {
         BufferedReader reader = new BufferedReader( input );
         String line = null;
         Map<String, String> header = null;
         
-        WeightedPattern[] benchCaseFilters =
-            RunUtil.loadFilters( options );
-        String timerFilterString = options.get( RunUtil.KEY_TIMER_FILTER );
-        timerFilterString = timerFilterString != null ? timerFilterString : "w";
+        WeightedPattern[] benchCaseFilters = RunUtil.loadFilters( options );
+        String timerFilterString = options.get( RunUtil.KEY_TIMER_FILTER, "w" );
         int lineCounter = 0;
         
         while ( ( line = reader.readLine() ) != null )

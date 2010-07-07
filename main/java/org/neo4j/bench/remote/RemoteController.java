@@ -1,11 +1,9 @@
 package org.neo4j.bench.remote;
 
-import java.util.Map;
-
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.servlet.ServletHandler;
-import org.neo4j.bench.RunUtil;
+import org.neo4j.helpers.Args;
 
 public class RemoteController
 {
@@ -34,14 +32,12 @@ public class RemoteController
     
     public static void main( String[] args ) throws Exception
     {
-        Map<String, String> arguments = RunUtil.parseArguments( args );
-        String portString = arguments.get( "port" );
-        portString = portString != null ? portString : "8080";
-        RemoteController server = new RemoteController(
-            Integer.parseInt( portString ) );
+        Args arguments = new Args( args );
+        int port = arguments.getNumber( "port", 8080 ).intValue();
+        RemoteController server = new RemoteController( port );
         server.start();
         System.out.println( "Remote controller started, you can reach it at " +
-        	"http://<host>:" + portString + "/run" );
+        	"http://<host>:" + port + "/run" );
         try
         {
             while ( true )

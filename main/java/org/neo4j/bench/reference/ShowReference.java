@@ -12,18 +12,19 @@ import org.neo4j.bench.AggregatedResultHandler;
 import org.neo4j.bench.ResultHandler;
 import org.neo4j.bench.ResultParser;
 import org.neo4j.bench.RunUtil;
+import org.neo4j.helpers.Args;
 
 public class ShowReference extends RunUtil
 {
     public static void main( String[] args ) throws Exception
     {
-        Map<String, String> arguments = parseArguments( args );
+        Args arguments = new Args( args );
         final List<OneResultData> dataset = new ArrayList<OneResultData>();
         final WeightedPattern[] benchFilters = loadFilters( arguments );
-        final String timeFilter = arguments.get( KEY_TIMER_FILTER );
+        final String timeFilter = arguments.get( KEY_TIMER_FILTER, null );
         final OneResultData[] referenceData = new OneResultData[ 1 ];
         final String[] referenceVersion = new String[ 1 ];
-        referenceVersion[ 0 ] = arguments.get( KEY_NEO_VERSION );
+        referenceVersion[ 0 ] = arguments.get( KEY_NEO_VERSION, null );
         ResultHandler handler = new ResultHandler()
         {
             OneResultData currentData = null;

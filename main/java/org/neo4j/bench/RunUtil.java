@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import org.neo4j.helpers.Args;
+
 public class RunUtil
 {
     public static final String KEY_NEO_VERSION = "neo-version";
@@ -24,36 +26,9 @@ public class RunUtil
     public static final String KEY_DATE = "date";
     public static final String DATE_FORMAT = "yyyy-MM-dd HH-mm-ss";
     
-    public static Map<String, String> parseArguments( String[] args )
+    public static WeightedPattern[] loadFilters( Args arguments ) throws IOException
     {
-        Map<String, String> result = new HashMap<String, String>();
-        for ( String arg : args )
-        {
-            if ( arg.startsWith( "-" ) )
-            {
-                arg = arg.substring( 1 );
-                String[] tokens = arg.split( Pattern.quote( "=" ) );
-                if ( tokens.length < 2 || tokens[ 1 ] == null ||
-                    tokens[ 1 ].trim().length() == 0 )
-                {
-                    continue;
-                }
-                result.put( tokens[ 0 ], tokens[ 1 ] );
-            }
-            else
-            {
-                throw new RuntimeException( "Arguments must be of type:" +
-                    "-<key>=<value>" );
-            }
-        }
-        return result;
-    }
-    
-    public static WeightedPattern[] loadFilters(
-        Map<String, String> arguments ) throws IOException
-    {
-        String filterFile = arguments.get( KEY_BENCH_FILTER_FILE );
-        filterFile = filterFile != null ? filterFile : "default-bench-filter";
+        String filterFile = arguments.get( KEY_BENCH_FILTER_FILE, "default-bench-filter" );
         if ( filterFile == null || !new File( filterFile ).exists() )
         {
             return null;
@@ -84,9 +59,9 @@ public class RunUtil
     }
     
     public static Map<String, Collection<String>> loadAggregations(
-        Map<String, String> arguments ) throws IOException
+        Args arguments ) throws IOException
     {
-        String file = arguments.get( KEY_AGGREGATIONS_FILE );
+        String file = arguments.get( KEY_AGGREGATIONS_FILE, null );
         if ( file == null )
         {
             return null;
@@ -131,7 +106,7 @@ public class RunUtil
     {
         if ( patternOrNull != null )
         {
-            if ( !Pattern.compile( patternOrNull ).matcher( toMatch ).find() )
+            if ( !Pattern.compile( patternOrNull ).matcher( toMatch ).matches() )
             {
                 return false;
             }
@@ -154,34 +129,11 @@ public class RunUtil
             }
         }
         return false;
-        
-//        String[] inclusionsPatters = patterns.get( true ) != null ?
-//            patterns.get( true ).toArray( new String[ 0 ] ) : null;
-//        String[] exclusionPatters = patterns.get( false ) != null ?
-//            patterns.get( false ).toArray( new String[ 0 ] ) : null;
-//        if ( exclusionPatters != null )
-//        {
-//            if ( matchesAny( exclusionPatters, toMatch ) )
-//            {
-//                return false;
-//            }
-//        }
-//        
-//        if ( inclusionsPatters != null )
-//        {
-//            if ( matchesAny( inclusionsPatters, toMatch ) )
-//            {
-//                return true;
-//            }
-//        }
-//        return false;
     }
 
-    public static File getResultsFile( Map<String, String> arguments )
+    public static File getResultsFile( Args arguments )
     {
-        String fileName = arguments.get( KEY_RESULTS_FILE );
-        fileName = fileName != null ? fileName : "results";
-        return new File( fileName );
+        return new File( arguments.get( KEY_RESULTS_FILE, "results" ) );
     }
     
     public static String shortenCount( int count )
