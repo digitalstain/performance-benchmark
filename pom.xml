@@ -2,11 +2,11 @@
 	<parent>
 		<groupId>org.neo4j</groupId>
 		<artifactId>parent-pom</artifactId>
-		<version>6</version>
+		<version>8</version>
 	</parent>
 	
 	<properties>
-		<neo-version>1.1-SNAPSHOT</neo-version>
+		<neo-version>1.2-SNAPSHOT</neo-version>
 		<jvm-memory>768M</jvm-memory>
 		<run-main-class>Please supply it via argument</run-main-class>
 		<timer-filter></timer-filter>
@@ -18,7 +18,7 @@
 	</properties>
 	
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.neo4j</groupId>
+	<groupId>org.neo4j.qa</groupId>
 	<artifactId>peformance-benchmark</artifactId>
 
 	<dependencies>
