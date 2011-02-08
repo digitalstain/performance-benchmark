@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>org.neo4j</groupId>
 		<artifactId>parent-pom</artifactId>
-		<version>8</version>
+		<version>14</version>
 	</parent>
 	
 	<properties>
@@ -61,6 +61,8 @@
 					<executable>java</executable>
 					<arguments>
 						<argument>-Xmx${jvm-memory}</argument>
+						<argument>-server</argument>
+                                                <argument>-XX:+UseConcMarkSweepGC</argument>
 						<argument>-classpath</argument>
 						<classpath/>
 						<argument>${run-main-class}</argument>

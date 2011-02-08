@@ -43,6 +43,7 @@ public class BenchCaseRunner
             }
         }
         graphDb = instantiateGraphDbService();
+        System.gc();
     }
     
     protected void afterCase( BenchCase benchCase )
