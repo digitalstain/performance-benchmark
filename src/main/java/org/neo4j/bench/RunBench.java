@@ -1,3 +1,22 @@
+/**
+ * Copyright (c) 2002-2011 "Neo Technology,"
+ * Network Engine for Objects in Lund AB [http://neotechnology.com]
+ *
+ * This file is part of Neo4j.
+ *
+ * Neo4j is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.neo4j.bench;
 
 import java.io.File;
@@ -21,6 +40,7 @@ import org.neo4j.bench.cases.CreateDeleteRelsCase;
 import org.neo4j.bench.cases.GetRelationshipsCase;
 import org.neo4j.bench.cases.MinReadTxCase;
 import org.neo4j.bench.cases.MinWriteTxCase;
+import org.neo4j.bench.cases.OverspillingLastTransactionCase;
 import org.neo4j.bench.cases.SetSameNodePropCase;
 import org.neo4j.bench.cases.SetSameRelPropCase;
 import org.neo4j.bench.cases.ValueGenerator;
@@ -121,6 +141,7 @@ public class RunBench extends RunUtil
         cases.add( new MinReadTxCase( iterationCounts ) );
         cases.add( new ComplexStructureCase( iterationCounts ) );
         cases.add( new GetRelationshipsCase( iterationCounts ) );
+        cases.add(new OverspillingLastTransactionCase( iterationCounts ));
         for ( Object propertyValue : propertyValues )
         {
             cases.add( new AddRemoveNodePropsCase( iterationCounts,

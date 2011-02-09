@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ -n "$MAIL_TO" ]; then
+	echo "Will mail errors to $MAIL_TO"
+else
+	read -p "No MAIL_TO set, use default (devteam@neotechnology.com) (Y/n)?"
+	if [ "$REPLY" != "n" ]; then
+		export MAIL_TO=devteam@neotechnology.com
+	fi
+fi
+
+echo $MAIL_TO
+
+while true; do
+	if [ -f stop ]; then
+		rm stop
+		echo "Stopped per user request"
+		exit 0
+	fi
+	if [ -f results]; then
+		rm results
+	fi
+
+	echo "Started another test run"
+	echo "Creating baseline with version 1.2"
+	./run-bench -Dneo-version=1.2-SNAPSHOT
+	echo "Checking performance of version 1.3-SNAPSHOT against baseline"
+	./run-bench -Dneo-version=1.3-SNAPSHOT
+	echo "Done. Now to check the results"
+	./check-threshold
+	if [ "0" -ne $? ]
+	then
+		echo "There was a problem with the performance package"
+		mail -s "Broken performance suite" $MAIL_TO < "results"
+		exit 1
+	fi
+done
+
+exit 0
